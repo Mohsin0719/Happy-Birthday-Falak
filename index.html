@@ -1,16 +1,233 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday!</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Happy Birthday Falak!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+        
+        body { 
+            background: radial-gradient(circle at center, #1f1235, #0f081d, #05020a); 
+            color: #fff; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            overflow: hidden; 
+            position: relative;
+        }
+
+        /* Magic Canvas */
+        #magicCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .screen { 
+            display: none; 
+            width: 90%; 
+            max-width: 420px; 
+            padding: 20px; 
+            text-align: center; 
+            z-index: 10;
+        }
+
+        /* Screen Smooth Fade & Slide Transition */
+        .screen.active { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            animation: slideInUp 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        @keyframes slideInUp {
+            0% { opacity: 0; transform: translateY(40px) scale(0.92); filter: blur(10px); }
+            100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+        }
+
+        .card { 
+            background: rgba(255, 255, 255, 0.08); 
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2); 
+            padding: 35px 25px; 
+            border-radius: 30px; 
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 121, 198, 0.2); 
+            width: 100%; 
+            animation: cardFloat 4s infinite ease-in-out alternate;
+        }
+
+        @keyframes cardFloat {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-10px); }
+        }
+
+        h1 { 
+            font-family: 'Dancing Script', cursive;
+            font-size: 45px; 
+            background: linear-gradient(45deg, #ff79c6, #ffb86c, #8be9fd, #bd93f9);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 4s ease infinite;
+            margin-bottom: 15px; 
+            filter: drop-shadow(0 0 10px rgba(255, 121, 198, 0.4));
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        h2, h3 { 
+            color: #ff79c6; 
+            margin-bottom: 15px; 
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(255, 121, 198, 0.5);
+        }
+
+        p { 
+            font-size: 15px; 
+            color: #f1f1f1; 
+            margin-bottom: 25px; 
+            line-height: 1.6;
+        }
+
+        button { 
+            background: linear-gradient(45deg, #ff416c, #ff4b2b); 
+            border: none; 
+            color: #fff; 
+            padding: 14px 32px; 
+            font-size: 16px; 
+            font-weight: 600;
+            border-radius: 30px; 
+            cursor: pointer; 
+            box-shadow: 0 5px 25px rgba(255, 65, 108, 0.6); 
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(255, 65, 108, 0.8);
+        }
+
+        button:active { 
+            transform: scale(0.95); 
+        }
+
+        .btn-group { 
+            display: flex; 
+            justify-content: center; 
+            gap: 15px; 
+            position: relative; 
+        }
+
+        .no-btn { 
+            background: rgba(255, 255, 255, 0.2); 
+            box-shadow: none;
+        }
+
+        .cake { 
+            font-size: 90px; 
+            margin: 15px 0; 
+            display: inline-block;
+            animation: pulseGlow 2s infinite ease-in-out;
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(1); filter: drop-shadow(0 0 5px #ff79c6); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 0 25px #ff79c6); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 5px #ff79c6); }
+        }
+
+        /* Floating Balloons Stage & Ribbon Strings */
+        .balloon-stage {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 5;
+            overflow: hidden;
+            display: none;
+        }
+
+        .balloon-stage.active-stage {
+            display: block;
+            pointer-events: auto;
+        }
+
+        .floating-balloon { 
+            position: absolute;
+            bottom: -150px;
+            width: 65px; 
+            height: 80px; 
+            border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%; 
+            cursor: pointer; 
+            box-shadow: inset -7px -7px 15px rgba(0,0,0,0.3), inset 5px 5px 10px rgba(255,255,255,0.4);
+            animation: riseUp 6.5s linear infinite;
+        }
+
+        /* Balloon Knot (Ganth) */
+        .floating-balloon::before {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 10px;
+            height: 6px;
+            background: inherit;
+            border-radius: 3px;
+        }
+
+        /* Long Curly Ribbon String / Dhaaga */
+        .balloon-string {
+            position: absolute;
+            top: 80px;
+            left: 50%;
+            width: 2px;
+            height: 60px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(255,255,255,0.1));
+            transform-origin: top center;
+            animation: stringWiggle 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes stringWiggle {
+            0% { transform: rotate(-5deg); }
+            100% { transform: rotate(5deg); }
+        }
+
+        @keyframes riseUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-115vh) rotate(15deg); opacity: 0.8; }
+        }
+
+        .hidden { display: none !important; }
+    </style>
 </head>
 <body>
+
+    <!-- Magic Background Canvas -->
+    <canvas id="magicCanvas"></canvas>
+
+    <!-- Floating Balloons Layer -->
+    <div id="balloonStage" class="balloon-stage"></div>
 
     <!-- Intro Screen -->
     <div id="screen1" class="screen active">
         <div class="card">
-            <span class="icon">🎂</span>
+            <span class="cake">🎂</span>
             <h1>It's Your Special Day</h1>
             <p>Yeyy!! 🎉 ✨</p>
             <button onclick="nextScreen(2)">Let's Begin ✨</button>
@@ -21,10 +238,10 @@
     <div id="screen2" class="screen">
         <div class="card">
             <h3>Have a look at it,</h3>
-            <h2 id="display-name-1">Jana</h2>
+            <h2 style="font-size: 36px;">Falak</h2>
             <p>Don't you dare say no! 🤫</p>
             <div class="btn-group">
-                <button class="yes-btn" onclick="nextScreen(3)">Yes! 💖</button>
+                <button onclick="nextScreen(3)">Yes! 💖</button>
                 <button class="no-btn" id="noBtn" onmouseover="moveBtn()" onclick="moveBtn()">No 🙈</button>
             </div>
         </div>
@@ -33,46 +250,138 @@
     <!-- Cake & Wish Screen -->
     <div id="screen3" class="screen">
         <div class="card">
-            <h1 class="sparkle-title">Happy Birthday <span id="display-name-2">Jana</span>! 🎉</h1>
-            <div class="cake-box">
-                <div class="cake">🎂</div>
-                <p>YOU ARE NOW <strong>19</strong> Years Young! 🌸</p>
-            </div>
+            <h1>Happy Birthday Falak! 🎉</h1>
+            <div class="cake">🎂</div>
+            <p>YOU ARE NOW <strong style="color: #ff79c6; font-size: 24px; text-shadow: 0 0 10px #ff79c6;">19</strong> Years Young! 🌸</p>
             <button onclick="nextScreen(4)">Cut The Cake 🎂</button>
         </div>
     </div>
 
     <!-- Heart Message Screen -->
     <div id="screen4" class="screen">
-        <div class="card message-card">
+        <div class="card">
             <h3>💌 A Message From My Heart</h3>
-            <p id="custom-message">
-                Dear <span id="display-name-3">Falak</span>,<br><br>
+            <p style="font-size: 15px; font-style: italic;">
+                Dear Falak,<br><br>
                 Happy Birthday to you🤌🏻🌚! On your special day✨🎀,
-                🎊Wishing you a year full of happiness,success & Allah's blessings.🌕💫🌸 
+                🎊Wishing you a year full of happiness, success & Allah's blessings.🌕💫🌸 
                 🎀May your life be filled with joy, health, and peace🧸. 
                 ✨May all your dreams come true.✨💖
             </p>
-            <button onclick="nextScreen(5)">Pop The Balloons 🎈</button>
+            <button onclick="startBalloonGame()">Pop The Balloons 🎈</button>
         </div>
     </div>
 
-    <!-- Game Screen -->
+    <!-- Balloon Game Screen -->
     <div id="screen5" class="screen">
-        <h2>Pop the Balloons! 🎈</h2>
-        <div class="balloon-container" id="balloonContainer"></div>
-        <button id="finalBtn" class="hidden" onclick="nextScreen(6)">See the Ending ✨</button>
+        <div class="card">
+            <h2>Pop the Floating Balloons! 🎈</h2>
+            <p style="font-size: 14px;">Tap 5 floating balloons with ribbons as they fly up!</p>
+            <button id="finalBtn" class="hidden" onclick="nextScreen(6)">See the Ending ✨</button>
+        </div>
     </div>
 
     <!-- Final Ending Screen -->
     <div id="screen6" class="screen">
-        <div class="card final-card">
-            <h1 id="display-name-4">Jana</h1>
-            <p class="tag">✨ 19 & Shining ✨</p>
-            <p>You're the best! Wishing you an epic amazing year ahead🥰 🎉🎉👏🥳"! ❤️</p>
+        <div class="card">
+            <h1>Falak</h1>
+            <p style="font-size: 20px; color: #ff79c6; font-weight: 600;">✨ 19 & Shining ✨</p>
+            <p>You're the best! Wishing you an epic amazing year ahead🥰 🎉🎉👏🥳! ❤️</p>
         </div>
     </div>
-    
-    <script src="script.js"></script>
+
+    <script>
+        function nextScreen(s) {
+            document.querySelectorAll('.screen').forEach(sc => sc.classList.remove('active'));
+            document.getElementById('balloonStage').classList.remove('active-stage');
+            document.getElementById('screen' + s).classList.add('active');
+        }
+
+        function moveBtn() {
+            let b = document.getElementById("noBtn");
+            b.style.position = "fixed";
+            b.style.left = Math.random() * (window.innerWidth - 80) + "px";
+            b.style.top = Math.random() * (window.innerHeight - 40) + "px";
+        }
+
+        // Floating Balloons + Ribbon Strings Logic
+        let popped = 0;
+        function startBalloonGame() {
+            nextScreen(5);
+            const stage = document.getElementById('balloonStage');
+            stage.innerHTML = '';
+            stage.classList.add('active-stage');
+            popped = 0;
+
+            const colors = ['#ff4b2b', '#ff79c6', '#8be9fd', '#bd93f9', '#f1fa8c', '#ff922b'];
+
+            for (let i = 0; i < 12; i++) {
+                let b = document.createElement("div");
+                b.className = "floating-balloon";
+                b.style.backgroundColor = colors[i % colors.length];
+                b.style.left = Math.random() * 80 + 10 + "vw";
+                b.style.animationDelay = (Math.random() * 4) + "s";
+                b.style.animationDuration = (Math.random() * 3 + 4.5) + "s";
+
+                // Adding Ribbon String under Balloon
+                let string = document.createElement("div");
+                string.className = "balloon-string";
+                b.appendChild(string);
+
+                b.onclick = function () {
+                    this.style.transform = "scale(1.4)";
+                    this.style.opacity = "0";
+                    setTimeout(() => this.remove(), 200);
+                    popped++;
+                    if (popped >= 5) {
+                        document.getElementById("finalBtn").classList.remove("hidden");
+                    }
+                };
+                stage.appendChild(b);
+            }
+        }
+
+        // Background Animation (Flowers + Stars + Hearts)
+        const canvas = document.getElementById("magicCanvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const particles = [];
+        const symbols = ['🌸', '✨', '💖', '⭐', '🌹', '🎉'];
+
+        for (let i = 0; i < 35; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 16 + 12,
+                speedY: Math.random() * 1.2 + 0.4,
+                speedX: Math.random() * 0.8 - 0.4,
+                symbol: symbols[Math.floor(Math.random() * symbols.length)]
+            });
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                ctx.font = `${p.size}px serif`;
+                ctx.fillText(p.symbol, p.x, p.y);
+                p.y += p.speedY;
+                p.x += p.speedX;
+
+                if (p.y > canvas.height) {
+                    p.y = -20;
+                    p.x = Math.random() * canvas.width;
+                }
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        window.addEventListener("resize", () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
 </body>
 </html>
