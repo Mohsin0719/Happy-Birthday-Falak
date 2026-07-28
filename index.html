@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday!</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Intro Screen -->
+    <div id="screen1" class="screen active">
+        <div class="card">
+            <span class="icon">🎂</span>
+            <h1>It's Your Special Day</h1>
+            <p>Yeyy!! 🎉 ✨</p>
+            <button onclick="nextScreen(2)">Let's Begin ✨</button>
+        </div>
+    </div>
+
+    <!-- Question Screen -->
+    <div id="screen2" class="screen">
+        <div class="card">
+            <h3>Have a look at it,</h3>
+            <h2 id="display-name-1">Jana</h2>
+            <p>Don't you dare say no! 🤫</p>
+            <div class="btn-group">
+                <button class="yes-btn" onclick="nextScreen(3)">Yes! 💖</button>
+                <button class="no-btn" id="noBtn" onmouseover="moveBtn()" onclick="moveBtn()">No 🙈</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cake & Wish Screen -->
+    <div id="screen3" class="screen">
+        <div class="card">
+            <h1 class="sparkle-title">Happy Birthday <span id="display-name-2">Jana</span>! 🎉</h1>
+            <div class="cake-box">
+                <div class="cake">🎂</div>
+                <p>YOU ARE NOW <strong>17</strong> Years Young! 🌸</p>
+            </div>
+            <button onclick="nextScreen(4)">Cut The Cake 🎂</button>
+        </div>
+    </div>
+
+    <!-- Heart Message Screen -->
+    <div id="screen4" class="screen">
+        <div class="card message-card">
+            <h3>💌 A Message From My Heart</h3>
+            <p id="custom-message">
+                Dear <span id="display-name-3">Jana</span>,<br><br>
+                Happy Birthday! On your special day, I just wanted to tell you how amazing you are.
+                May this year bring you endless smiles, joy, and success! ✨💖
+            </p>
+            <button onclick="nextScreen(5)">Pop The Balloons 🎈</button>
+        </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="screen5" class="screen">
+        <h2>Pop the Balloons! 🎈</h2>
+        <div class="balloon-container" id="balloonContainer"></div>
+        <button id="finalBtn" class="hidden" onclick="nextScreen(6)">See the Ending ✨</button>
+    </div>
+
+    <!-- Final Ending Screen -->
+    <div id="screen6" class="screen">
+        <div class="card final-card">
+            <h1 id="display-name-4">Jana</h1>
+            <p class="tag">✨ 17 & Shining ✨</p>
+            <p>You walked into this little world I made just for you! ❤️</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
