@@ -17,6 +17,7 @@
             min-height: 100vh; 
             overflow: hidden; 
             position: relative;
+            perspective: 1000px;
         }
 
         /* Magic Canvas Background - STRICTLY BEHIND (Z-INDEX 1) */
@@ -48,7 +49,7 @@
             pointer-events: auto;
         }
 
-        /* Pop-up Windows / Cards - PERFECTLY CENTERED & ON TOP (Z-INDEX 10) */
+        /* Pop-up Windows / Cards - PERFECTLY ALIGNED SLIGHTLY ABOVE CENTER (Z-INDEX 10) */
         .screen { 
             display: none; 
             width: 90%; 
@@ -57,9 +58,9 @@
             text-align: center; 
             z-index: 10; 
             position: absolute;
-            top: 50%;
+            top: 45%; /* MOVED UP FROM 50% TO BE SLIGHTLY ABOVE CENTER ON MOBILE */
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%); /* Base positioning */
         }
 
         .screen.active { 
@@ -67,22 +68,30 @@
             flex-direction: column; 
             align-items: center; 
             justify-content: center; 
-            animation: slideInUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            animation: professionalFlip 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
 
-        @keyframes slideInUp {
-            0% { opacity: 0; transform: translate(-50%, -40%) scale(0.9); filter: blur(10px); }
-            100% { opacity: 1; transform: translate(-50%, -50%) scale(1); filter: blur(0); }
+        @keyframes professionalFlip {
+            0% { 
+                opacity: 0; 
+                transform: translate(-50%, -40%) scale(0.8) rotateY(-30deg); /* Starts 10% lower relative to center */
+                filter: blur(12px); 
+            }
+            100% { 
+                opacity: 1; 
+                transform: translate(-50%, -50%) scale(1) rotateY(0deg); /* Ends exactly at top: 45% centered horizontally and vertically */
+                filter: blur(0); 
+            }
         }
 
         .card { 
-            background: rgba(255, 255, 255, 0.08); 
-            backdrop-filter: blur(25px); 
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.2); 
-            padding: 30px 22px; 
-            border-radius: 30px; 
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 121, 198, 0.25); 
+            background: rgba(255, 255, 255, 0.09); 
+            backdrop-filter: blur(30px); 
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.25); 
+            padding: 32px 24px; 
+            border-radius: 32px; 
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 35px rgba(255, 121, 198, 0.3); 
             width: 100%; 
             animation: cardFloat 4s infinite ease-in-out alternate;
         }
@@ -90,6 +99,20 @@
         @keyframes cardFloat {
             0% { transform: translateY(0px); }
             100% { transform: translateY(-8px); }
+        }
+
+        .date-badge {
+            display: inline-block;
+            background: linear-gradient(45deg, rgba(255, 121, 198, 0.2), rgba(139, 233, 253, 0.2));
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #ffb86c;
+            padding: 5px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+            box-shadow: 0 0 10px rgba(255, 184, 108, 0.3);
         }
 
         h1 { 
@@ -135,6 +158,15 @@
         .msg-text span {
             display: block;
             margin-bottom: 6px;
+        }
+
+        .from-tag {
+            font-size: 16px;
+            font-weight: 600;
+            color: #8be9fd;
+            text-shadow: 0 0 10px rgba(139, 233, 253, 0.6);
+            margin-top: 15px;
+            font-style: italic;
         }
 
         button { 
@@ -242,6 +274,7 @@
     <!-- Screen 1: Let's Start -->
     <div id="screen1" class="screen active">
         <div class="card">
+            <div class="date-badge">📅 03 August 2026</div>
             <span class="cake">✨</span>
             <h1>Surprise Inside!</h1>
             <p>Are you ready for your special gift, Falak? 🌸</p>
@@ -272,12 +305,13 @@
         </div>
     </div>
 
-    <!-- Screen 4: Cake & Age -->
+    <!-- Screen 4: Cake & Age (03 Years Young) -->
     <div id="screen4" class="screen">
         <div class="card">
+            <div class="date-badge">🎈 Special Celebration</div>
             <h1>Happy Birthday Falak! 🎉</h1>
             <div class="cake">🎂</div>
-            <p>YOU ARE NOW <strong style="color: #ff79c6; font-size: 24px; text-shadow: 0 0 10px #ff79c6;">19</strong> Years Young! 🌸</p>
+            <p>YOU ARE NOW <strong style="color: #ff79c6; font-size: 26px; text-shadow: 0 0 10px #ff79c6;">03</strong> Years Young! 🌸</p>
             <button onclick="startBalloonGame()">Cut The Cake 🎂</button>
         </div>
     </div>
@@ -306,23 +340,24 @@
         </div>
     </div>
 
-    <!-- Screen 7: 19 & Shining -->
+    <!-- Screen 7: 03 & Shining -->
     <div id="screen7" class="screen">
         <div class="card">
             <h1>Falak</h1>
-            <p style="font-size: 20px; color: #ff79c6; font-weight: 600;">✨ 19 & Shining ✨</p>
+            <p style="font-size: 20px; color: #ff79c6; font-weight: 600;">✨ 03 & Shining ✨</p>
             <p>You're the best! Wishing you an epic amazing year ahead🥰 🎉🎉👏🥳! ❤️</p>
             <button onclick="nextScreen(8)">Final Note ✨</button>
         </div>
     </div>
 
-    <!-- Screen 8: Final Text Message -->
+    <!-- Screen 8: Final Text Message (Heading Removed, "lots of love" Removed) -->
     <div id="screen8" class="screen">
         <div class="card">
-            <p style="font-size: 18px; font-weight: 500; line-height: 1.6; text-shadow: 0 0 10px rgba(255, 121, 198, 0.4); margin-bottom: 25px; margin-top: 10px;">
+            <p style="font-size: 18px; font-weight: 500; line-height: 1.6; text-shadow: 0 0 10px rgba(255, 121, 198, 0.4); margin-bottom: 10px; margin-top: 10px;">
                 Created just for you to make your day extra special! ❤️✨
             </p>
-            <button onclick="finishCelebration()">Finish ✨</button>
+            <div class="from-tag">From Mohsin ✨</div>
+            <button style="margin-top: 20px;" onclick="finishCelebration()">Finish ✨</button>
         </div>
     </div>
 
@@ -330,7 +365,7 @@
         let audioCtx = null;
         let isMusicPlaying = false;
 
-        // Non-stop Happy Birthday Background Music Loop
+        // High Quality & Loud Happy Birthday Melody Loop
         function startContinuousMusic() {
             if (isMusicPlaying) return;
             try {
@@ -343,6 +378,7 @@
 
                 isMusicPlaying = true;
 
+                // Louder & Rich Melodic Frequencies
                 const tune = [
                     {f: 392.00, d: 0.3}, {f: 392.00, d: 0.3}, {f: 440.00, d: 0.6}, {f: 392.00, d: 0.6}, {f: 523.25, d: 0.6}, {f: 493.88, d: 1.0},
                     {f: 392.00, d: 0.3}, {f: 392.00, d: 0.3}, {f: 440.00, d: 0.6}, {f: 392.00, d: 0.6}, {f: 587.33, d: 0.6}, {f: 523.25, d: 1.0},
@@ -354,23 +390,34 @@
 
                 function scheduleNextNote() {
                     let note = tune[noteIdx % tune.length];
-                    let osc = audioCtx.createOscillator();
+                    
+                    // Main Sound Lead Oscillator
+                    let osc1 = audioCtx.createOscillator();
+                    // Harmony Chime Oscillator for loudness and depth
+                    let osc2 = audioCtx.createOscillator();
                     let gain = audioCtx.createGain();
 
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(note.f, audioCtx.currentTime);
+                    osc1.type = 'sine';
+                    osc2.type = 'triangle';
 
-                    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                    osc1.frequency.setValueAtTime(note.f, audioCtx.currentTime);
+                    osc2.frequency.setValueAtTime(note.f * 2, audioCtx.currentTime); // Octave higher chime
+
+                    // Higher Volume Boost (0.28)
+                    gain.gain.setValueAtTime(0.28, audioCtx.currentTime);
                     gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + note.d);
 
-                    osc.connect(gain);
+                    osc1.connect(gain);
+                    osc2.connect(gain);
                     gain.connect(audioCtx.destination);
 
-                    osc.start();
-                    osc.stop(audioCtx.currentTime + note.d);
+                    osc1.start();
+                    osc2.start();
+                    osc1.stop(audioCtx.currentTime + note.d);
+                    osc2.stop(audioCtx.currentTime + note.d);
 
                     noteIdx++;
-                    setTimeout(scheduleNextNote, (note.d * 1000) + 120);
+                    setTimeout(scheduleNextNote, (note.d * 1000) + 100);
                 }
 
                 scheduleNextNote();
@@ -383,10 +430,10 @@
                 let osc = audioCtx.createOscillator();
                 let gain = audioCtx.createGain();
                 osc.type = 'sine';
-                osc.frequency.setValueAtTime(450, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(850, audioCtx.currentTime + 0.1);
+                osc.frequency.setValueAtTime(500, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(950, audioCtx.currentTime + 0.1);
                 
-                gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
                 
                 osc.connect(gain);
@@ -470,7 +517,7 @@
             alert('Hope this brought the biggest smile to your face, Falak! ✨💖');
         }
 
-        // Canvas Background Animation
+        // Canvas Background Animation Behind Cards
         const canvas = document.getElementById("magicCanvas");
         const ctx = canvas.getContext("2d");
         canvas.width = window.innerWidth;
