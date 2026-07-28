@@ -39,7 +39,6 @@
             z-index: 10;
         }
 
-        /* Screen Smooth Fade & Slide Transition */
         .screen.active { 
             display: flex; 
             flex-direction: column; 
@@ -149,7 +148,6 @@
             100% { transform: scale(1); filter: drop-shadow(0 0 5px #ff79c6); }
         }
 
-        /* Floating Balloons Stage & Ribbon Strings */
         .balloon-stage {
             position: fixed;
             top: 0;
@@ -178,7 +176,6 @@
             animation: riseUp 6.5s linear infinite;
         }
 
-        /* Balloon Knot (Ganth) */
         .floating-balloon::before {
             content: '';
             position: absolute;
@@ -191,7 +188,6 @@
             border-radius: 3px;
         }
 
-        /* Long Curly Ribbon String / Dhaaga */
         .balloon-string {
             position: absolute;
             top: 80px;
@@ -218,13 +214,9 @@
 </head>
 <body>
 
-    <!-- Magic Background Canvas -->
     <canvas id="magicCanvas"></canvas>
-
-    <!-- Floating Balloons Layer -->
     <div id="balloonStage" class="balloon-stage"></div>
 
-    <!-- Intro Screen -->
     <div id="screen1" class="screen active">
         <div class="card">
             <span class="cake">🎂</span>
@@ -234,7 +226,6 @@
         </div>
     </div>
 
-    <!-- Question Screen -->
     <div id="screen2" class="screen">
         <div class="card">
             <h3>Have a look at it,</h3>
@@ -247,7 +238,6 @@
         </div>
     </div>
 
-    <!-- Cake & Wish Screen -->
     <div id="screen3" class="screen">
         <div class="card">
             <h1>Happy Birthday Falak! 🎉</h1>
@@ -257,7 +247,6 @@
         </div>
     </div>
 
-    <!-- Heart Message Screen -->
     <div id="screen4" class="screen">
         <div class="card">
             <h3>💌 A Message From My Heart</h3>
@@ -272,41 +261,84 @@
         </div>
     </div>
 
-    <!-- Balloon Game Screen -->
     <div id="screen5" class="screen">
         <div class="card">
             <h2>Pop the Floating Balloons! 🎈</h2>
             <p style="font-size: 14px;">Tap 5 floating balloons with ribbons as they fly up!</p>
-            <button id="finalBtn" class="hidden" onclick="nextScreen(6)">See the Ending ✨</button>
+            <button id="finalBtn" class="hidden" onclick="nextScreen(6)">See the Final Wish ✨</button>
         </div>
     </div>
 
-    <!-- Final Ending Screen -->
     <div id="screen6" class="screen">
         <div class="card">
             <h1>Falak</h1>
             <p style="font-size: 20px; color: #ff79c6; font-weight: 600;">✨ 19 & Shining ✨</p>
             <p>You're the best! Wishing you an epic amazing year ahead🥰 🎉🎉👏🥳! ❤️</p>
+            <button onclick="nextScreen(7)">Final Note ✨</button>
+        </div>
+    </div>
+
+    <div id="screen7" class="screen">
+        <div class="card">
+            <h3>A Final Note ✨</h3>
+            <p style="font-size: 17px; font-weight: 500; line-height: 1.6; text-shadow: 0 0 10px rgba(255, 121, 198, 0.4);">
+                Created just for you to make your day extra special! ❤️✨
+            </p>
+            <button onclick="playFinishSound()">Finish ✨</button>
         </div>
     </div>
 
     <script>
+        // Web Audio API for Cute Click/Pop & Magic Sounds (No external audio files required!)
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playPopSound() {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.1);
+            
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.1);
+        }
+
+        // Trigger Vibration on supported devices
+        function triggerVibration() {
+            if ("vibrate" in navigator) {
+                navigator.vibrate(40); // 40ms light haptic feedback
+            }
+        }
+
         function nextScreen(s) {
+            playPopSound();
+            triggerVibration();
             document.querySelectorAll('.screen').forEach(sc => sc.classList.remove('active'));
             document.getElementById('balloonStage').classList.remove('active-stage');
             document.getElementById('screen' + s).classList.add('active');
         }
 
         function moveBtn() {
+            triggerVibration();
             let b = document.getElementById("noBtn");
             b.style.position = "fixed";
             b.style.left = Math.random() * (window.innerWidth - 80) + "px";
             b.style.top = Math.random() * (window.innerHeight - 40) + "px";
         }
 
-        // Floating Balloons + Ribbon Strings Logic
         let popped = 0;
         function startBalloonGame() {
+            playPopSound();
+            triggerVibration();
             nextScreen(5);
             const stage = document.getElementById('balloonStage');
             stage.innerHTML = '';
@@ -323,12 +355,13 @@
                 b.style.animationDelay = (Math.random() * 4) + "s";
                 b.style.animationDuration = (Math.random() * 3 + 4.5) + "s";
 
-                // Adding Ribbon String under Balloon
                 let string = document.createElement("div");
                 string.className = "balloon-string";
                 b.appendChild(string);
 
                 b.onclick = function () {
+                    playPopSound();
+                    triggerVibration();
                     this.style.transform = "scale(1.4)";
                     this.style.opacity = "0";
                     setTimeout(() => this.remove(), 200);
@@ -341,7 +374,12 @@
             }
         }
 
-        // Background Animation (Flowers + Stars + Hearts)
+        function playFinishSound() {
+            playPopSound();
+            triggerVibration();
+            alert('Hope this brought a big smile to your face! ✨');
+        }
+
         const canvas = document.getElementById("magicCanvas");
         const ctx = canvas.getContext("2d");
         canvas.width = window.innerWidth;
@@ -350,13 +388,13 @@
         const particles = [];
         const symbols = ['🌸', '✨', '💖', '⭐', '🌹', '🎉'];
 
-        for (let i = 0; i < 35; i++) {
+        for (let i = 0; i < 25; i++) { 
             particles.push({
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
-                size: Math.random() * 16 + 12,
-                speedY: Math.random() * 1.2 + 0.4,
-                speedX: Math.random() * 0.8 - 0.4,
+                size: Math.random() * 14 + 10,
+                speedY: Math.random() * 0.9 + 0.3,
+                speedX: Math.random() * 0.6 - 0.3,
                 symbol: symbols[Math.floor(Math.random() * symbols.length)]
             });
         }
