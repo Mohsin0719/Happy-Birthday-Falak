@@ -20,7 +20,7 @@
             perspective: 1000px;
         }
 
-        /* Magic Canvas Background - STRICTLY BEHIND (Z-INDEX 1) */
+        /* Magic Canvas Background */
         #magicCanvas {
             position: fixed;
             top: 0;
@@ -31,7 +31,7 @@
             z-index: 1; 
         }
 
-        /* Balloons Layer - STRICTLY BEHIND CARDS (Z-INDEX 2) */
+        /* Balloons Layer */
         .balloon-stage {
             position: fixed;
             top: 0;
@@ -49,7 +49,7 @@
             pointer-events: auto;
         }
 
-        /* Pop-up Windows / Cards - PERFECTLY ALIGNED SLIGHTLY ABOVE CENTER (Z-INDEX 10) */
+        /* Pop-up Windows / Cards - Shifted Slightly Above Center (Top 42%) */
         .screen { 
             display: none; 
             width: 90%; 
@@ -58,9 +58,9 @@
             text-align: center; 
             z-index: 10; 
             position: absolute;
-            top: 45%; /* MOVED UP FROM 50% TO BE SLIGHTLY ABOVE CENTER ON MOBILE */
+            top: 42%;
             left: 50%;
-            transform: translate(-50%, -50%); /* Base positioning */
+            transform: translate(-50%, -50%);
         }
 
         .screen.active { 
@@ -74,12 +74,12 @@
         @keyframes professionalFlip {
             0% { 
                 opacity: 0; 
-                transform: translate(-50%, -40%) scale(0.8) rotateY(-30deg); /* Starts 10% lower relative to center */
-                filter: blur(12px); 
+                transform: translate(-50%, -40%) scale(0.85) rotateY(-20deg); 
+                filter: blur(10px); 
             }
             100% { 
                 opacity: 1; 
-                transform: translate(-50%, -50%) scale(1) rotateY(0deg); /* Ends exactly at top: 45% centered horizontally and vertically */
+                transform: translate(-50%, -50%) scale(1) rotateY(0deg); 
                 filter: blur(0); 
             }
         }
@@ -103,16 +103,16 @@
 
         .date-badge {
             display: inline-block;
-            background: linear-gradient(45deg, rgba(255, 121, 198, 0.2), rgba(139, 233, 253, 0.2));
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: linear-gradient(45deg, rgba(255, 121, 198, 0.25), rgba(139, 233, 253, 0.25));
+            border: 1px solid rgba(255, 255, 255, 0.4);
             color: #ffb86c;
-            padding: 5px 16px;
+            padding: 6px 18px;
             border-radius: 20px;
             font-size: 13px;
             font-weight: 600;
             margin-bottom: 15px;
             letter-spacing: 1px;
-            box-shadow: 0 0 10px rgba(255, 184, 108, 0.3);
+            box-shadow: 0 0 12px rgba(255, 184, 108, 0.4);
         }
 
         h1 { 
@@ -161,11 +161,12 @@
         }
 
         .from-tag {
-            font-size: 16px;
+            font-size: 17px;
             font-weight: 600;
             color: #8be9fd;
-            text-shadow: 0 0 10px rgba(139, 233, 253, 0.6);
-            margin-top: 15px;
+            text-shadow: 0 0 12px rgba(139, 233, 253, 0.8);
+            margin-top: 10px;
+            margin-bottom: 15px;
             font-style: italic;
         }
 
@@ -204,8 +205,8 @@
         }
 
         .cake { 
-            font-size: 80px; 
-            margin: 10px 0; 
+            font-size: 75px; 
+            margin: 8px 0; 
             display: inline-block;
             animation: pulseGlow 2s infinite ease-in-out;
         }
@@ -305,13 +306,14 @@
         </div>
     </div>
 
-    <!-- Screen 4: Cake & Age (03 Years Young) -->
+    <!-- Screen 4: Cake & Age (Happy Birthday Screen with From Mohsin and Date) -->
     <div id="screen4" class="screen">
         <div class="card">
-            <div class="date-badge">🎈 Special Celebration</div>
+            <div class="date-badge">🎈 03 August 2026 🎈</div>
             <h1>Happy Birthday Falak! 🎉</h1>
             <div class="cake">🎂</div>
-            <p>YOU ARE NOW <strong style="color: #ff79c6; font-size: 26px; text-shadow: 0 0 10px #ff79c6;">03</strong> Years Young! 🌸</p>
+            <p style="margin-bottom: 8px;">YOU ARE NOW <strong style="color: #ff79c6; font-size: 26px; text-shadow: 0 0 10px #ff79c6;">19</strong> Years Young! 🌸</p>
+            <div class="from-tag">~ From Mohsin ✨💖</div>
             <button onclick="startBalloonGame()">Cut The Cake 🎂</button>
         </div>
     </div>
@@ -340,24 +342,25 @@
         </div>
     </div>
 
-    <!-- Screen 7: 03 & Shining -->
+    <!-- Screen 7: 19 & Shining -->
     <div id="screen7" class="screen">
         <div class="card">
+            <div class="date-badge">✨ 03 August 2026 ✨</div>
             <h1>Falak</h1>
-            <p style="font-size: 20px; color: #ff79c6; font-weight: 600;">✨ 03 & Shining ✨</p>
+            <p style="font-size: 20px; color: #ff79c6; font-weight: 600;">✨ 19 & Shining ✨</p>
             <p>You're the best! Wishing you an epic amazing year ahead🥰 🎉🎉👏🥳! ❤️</p>
             <button onclick="nextScreen(8)">Final Note ✨</button>
         </div>
     </div>
 
-    <!-- Screen 8: Final Text Message (Heading Removed, "lots of love" Removed) -->
+    <!-- Screen 8: Final Text Message -->
     <div id="screen8" class="screen">
         <div class="card">
-            <p style="font-size: 18px; font-weight: 500; line-height: 1.6; text-shadow: 0 0 10px rgba(255, 121, 198, 0.4); margin-bottom: 10px; margin-top: 10px;">
+            <p style="font-size: 18px; font-weight: 500; line-height: 1.6; text-shadow: 0 0 10px rgba(255, 121, 198, 0.4); margin-bottom: 15px; margin-top: 10px;">
                 Created just for you to make your day extra special! ❤️✨
             </p>
-            <div class="from-tag">From Mohsin ✨</div>
-            <button style="margin-top: 20px;" onclick="finishCelebration()">Finish ✨</button>
+            <div class="from-tag">~ From Mohsin ✨💖</div>
+            <button style="margin-top: 10px;" onclick="finishCelebration()">Finish ✨</button>
         </div>
     </div>
 
@@ -365,7 +368,6 @@
         let audioCtx = null;
         let isMusicPlaying = false;
 
-        // High Quality & Loud Happy Birthday Melody Loop
         function startContinuousMusic() {
             if (isMusicPlaying) return;
             try {
@@ -378,7 +380,6 @@
 
                 isMusicPlaying = true;
 
-                // Louder & Rich Melodic Frequencies
                 const tune = [
                     {f: 392.00, d: 0.3}, {f: 392.00, d: 0.3}, {f: 440.00, d: 0.6}, {f: 392.00, d: 0.6}, {f: 523.25, d: 0.6}, {f: 493.88, d: 1.0},
                     {f: 392.00, d: 0.3}, {f: 392.00, d: 0.3}, {f: 440.00, d: 0.6}, {f: 392.00, d: 0.6}, {f: 587.33, d: 0.6}, {f: 523.25, d: 1.0},
@@ -390,10 +391,7 @@
 
                 function scheduleNextNote() {
                     let note = tune[noteIdx % tune.length];
-                    
-                    // Main Sound Lead Oscillator
                     let osc1 = audioCtx.createOscillator();
-                    // Harmony Chime Oscillator for loudness and depth
                     let osc2 = audioCtx.createOscillator();
                     let gain = audioCtx.createGain();
 
@@ -401,9 +399,8 @@
                     osc2.type = 'triangle';
 
                     osc1.frequency.setValueAtTime(note.f, audioCtx.currentTime);
-                    osc2.frequency.setValueAtTime(note.f * 2, audioCtx.currentTime); // Octave higher chime
+                    osc2.frequency.setValueAtTime(note.f * 2, audioCtx.currentTime);
 
-                    // Higher Volume Boost (0.28)
                     gain.gain.setValueAtTime(0.28, audioCtx.currentTime);
                     gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + note.d);
 
@@ -517,7 +514,7 @@
             alert('Hope this brought the biggest smile to your face, Falak! ✨💖');
         }
 
-        // Canvas Background Animation Behind Cards
+        // Canvas Background Animation
         const canvas = document.getElementById("magicCanvas");
         const ctx = canvas.getContext("2d");
         canvas.width = window.innerWidth;
