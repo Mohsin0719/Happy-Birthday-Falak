@@ -19,7 +19,7 @@
             position: relative;
         }
 
-        /* Magic Canvas Background - Strictly Behind Everything */
+        /* Magic Canvas Background - STRICTLY BEHIND (Z-INDEX 1) */
         #magicCanvas {
             position: fixed;
             top: 0;
@@ -30,7 +30,7 @@
             z-index: 1; 
         }
 
-        /* Floating Balloons Stage - Strictly Behind Pop-up Cards */
+        /* Balloons Layer - STRICTLY BEHIND CARDS (Z-INDEX 2) */
         .balloon-stage {
             position: fixed;
             top: 0;
@@ -48,14 +48,18 @@
             pointer-events: auto;
         }
 
-        /* Pop-up Windows / Cards - Always on Top */
+        /* Pop-up Windows / Cards - PERFECTLY CENTERED & ON TOP (Z-INDEX 10) */
         .screen { 
             display: none; 
             width: 90%; 
             max-width: 420px; 
-            padding: 20px; 
+            padding: 10px; 
             text-align: center; 
             z-index: 10; 
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
 
         .screen.active { 
@@ -63,40 +67,40 @@
             flex-direction: column; 
             align-items: center; 
             justify-content: center; 
-            animation: slideInUp 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            animation: slideInUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
 
         @keyframes slideInUp {
-            0% { opacity: 0; transform: translateY(40px) scale(0.92); filter: blur(10px); }
-            100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+            0% { opacity: 0; transform: translate(-50%, -40%) scale(0.9); filter: blur(10px); }
+            100% { opacity: 1; transform: translate(-50%, -50%) scale(1); filter: blur(0); }
         }
 
         .card { 
             background: rgba(255, 255, 255, 0.08); 
-            backdrop-filter: blur(20px); 
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(25px); 
+            -webkit-backdrop-filter: blur(25px);
             border: 1px solid rgba(255, 255, 255, 0.2); 
-            padding: 35px 25px; 
+            padding: 30px 22px; 
             border-radius: 30px; 
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 121, 198, 0.2); 
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 121, 198, 0.25); 
             width: 100%; 
             animation: cardFloat 4s infinite ease-in-out alternate;
         }
 
         @keyframes cardFloat {
             0% { transform: translateY(0px); }
-            100% { transform: translateY(-10px); }
+            100% { transform: translateY(-8px); }
         }
 
         h1 { 
             font-family: 'Dancing Script', cursive;
-            font-size: 45px; 
+            font-size: 42px; 
             background: linear-gradient(45deg, #ff79c6, #ffb86c, #8be9fd, #bd93f9);
             background-size: 300% 300%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: gradientShift 4s ease infinite;
-            margin-bottom: 15px; 
+            margin-bottom: 12px; 
             filter: drop-shadow(0 0 10px rgba(255, 121, 198, 0.4));
         }
 
@@ -108,7 +112,7 @@
 
         h2, h3 { 
             color: #ff79c6; 
-            margin-bottom: 15px; 
+            margin-bottom: 12px; 
             font-weight: 600;
             text-shadow: 0 0 10px rgba(255, 121, 198, 0.5);
         }
@@ -116,16 +120,30 @@
         p { 
             font-size: 15px; 
             color: #f1f1f1; 
-            margin-bottom: 25px; 
+            margin-bottom: 20px; 
             line-height: 1.6;
+        }
+
+        /* Custom formatting for letter lines */
+        .msg-text {
+            font-size: 14px;
+            font-style: italic;
+            text-align: center;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .msg-text span {
+            display: block;
+            margin-bottom: 6px;
         }
 
         button { 
             background: linear-gradient(45deg, #ff416c, #ff4b2b); 
             border: none; 
             color: #fff; 
-            padding: 14px 32px; 
-            font-size: 16px; 
+            padding: 13px 30px; 
+            font-size: 15px; 
             font-weight: 600;
             border-radius: 30px; 
             cursor: pointer; 
@@ -155,15 +173,15 @@
         }
 
         .cake { 
-            font-size: 90px; 
-            margin: 15px 0; 
+            font-size: 80px; 
+            margin: 10px 0; 
             display: inline-block;
             animation: pulseGlow 2s infinite ease-in-out;
         }
 
         @keyframes pulseGlow {
             0% { transform: scale(1); filter: drop-shadow(0 0 5px #ff79c6); }
-            50% { transform: scale(1.1); filter: drop-shadow(0 0 25px #ff79c6); }
+            50% { transform: scale(1.08); filter: drop-shadow(0 0 25px #ff79c6); }
             100% { transform: scale(1); filter: drop-shadow(0 0 5px #ff79c6); }
         }
 
@@ -222,7 +240,7 @@
     <!-- Balloons Layer -->
     <div id="balloonStage" class="balloon-stage"></div>
 
-    <!-- Screen 1: New Intro Window (Let's Start) -->
+    <!-- Screen 1: Let's Start -->
     <div id="screen1" class="screen active">
         <div class="card">
             <span class="cake">✨</span>
@@ -246,7 +264,7 @@
     <div id="screen3" class="screen">
         <div class="card">
             <h3>Have a look at it,</h3>
-            <h2 style="font-size: 36px;">Falak</h2>
+            <h2 style="font-size: 34px;">Falak</h2>
             <p>Don't you dare say no! 🤫</p>
             <div class="btn-group">
                 <button onclick="nextScreen(4)">Yes! 💖</button>
@@ -265,17 +283,17 @@
         </div>
     </div>
 
-    <!-- Screen 5: Heart Message -->
+    <!-- Screen 5: Heart Message (Formatted as Requested) -->
     <div id="screen5" class="screen">
         <div class="card">
             <h3>💌 A Message From My Heart</h3>
-            <p style="font-size: 15px; font-style: italic;">
-                Dear Falak,<br><br>
-                Happy Birthday to you🤌🏻🌚! On your special day✨🎀,
-                🎊Wishing you a year full of happiness, success & Allah's blessings.🌕💫🌸 
-                🎀May your life be filled with joy, health, and peace🧸. 
-                ✨May all your dreams come true.✨💖
-            </p>
+            <div class="msg-text">
+                <span>Dear Falak,</span>
+                <span>Happy Birthday to you🤌🏻🌚! On your special day✨🎀,</span>
+                <span>🎊Wishing you a year full of happiness, success & Allah's blessings.🌕💫🌸</span>
+                <span>🎀May your life be filled with joy, health, and peace🧸.</span>
+                <span>✨May all your dreams come true.✨💖</span>
+            </div>
             <button onclick="startBalloonGame()">Pop The Balloons 🎈</button>
         </div>
     </div>
@@ -284,7 +302,7 @@
     <div id="screen6" class="screen">
         <div class="card">
             <h2>Pop the Floating Balloons! 🎈</h2>
-            <p style="font-size: 14px;">Tap balloons as they fly up! (At least 5 to proceed)</p>
+            <p style="font-size: 14px;">Tap balloons as they fly up!</p>
             <button id="finalBtn" class="hidden" onclick="nextScreen(7)">See the Final Wish ✨</button>
         </div>
     </div>
@@ -299,7 +317,7 @@
         </div>
     </div>
 
-    <!-- Screen 8: Final Note (Exact Requested Note) -->
+    <!-- Screen 8: Final Note -->
     <div id="screen8" class="screen">
         <div class="card">
             <h3>A Final Note ✨</h3>
@@ -314,8 +332,8 @@
         let audioCtx = null;
         let bgMusicInterval = null;
 
-        // Magical Background Melody Generator (Plays automatically after "Let's Start")
-        function startBackgroundMusic() {
+        // Happy Birthday Melody Generator
+        function startHappyBirthdayTune() {
             if (bgMusicInterval) return;
             try {
                 if (!audioCtx) {
@@ -325,29 +343,39 @@
                     audioCtx.resume();
                 }
 
-                // Soft soothing notes progression (Happy Birthday tune vibe)
-                const notes = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 523.25];
-                let index = 0;
+                // Happy Birthday Tune Notes (G4, G4, A4, G4, C5, B4...)
+                const tune = [
+                    {f: 392.00, d: 0.3}, {f: 392.00, d: 0.3}, {f: 440.00, d: 0.6}, {f: 392.00, d: 0.6}, {f: 523.25, d: 0.6}, {f: 493.88, d: 1.0},
+                    {f: 392.00, d: 0.3}, {f: 392.00, d: 0.3}, {f: 440.00, d: 0.6}, {f: 392.00, d: 0.6}, {f: 587.33, d: 0.6}, {f: 523.25, d: 1.0},
+                    {f: 392.00, d: 0.3}, {f: 392.00, d: 0.3}, {f: 783.99, d: 0.6}, {f: 659.25, d: 0.6}, {f: 523.25, d: 0.6}, {f: 493.88, d: 0.6}, {f: 440.00, d: 0.8},
+                    {f: 698.46, d: 0.3}, {f: 698.46, d: 0.3}, {f: 659.25, d: 0.6}, {f: 523.25, d: 0.6}, {f: 587.33, d: 0.6}, {f: 523.25, d: 1.2}
+                ];
 
-                bgMusicInterval = setInterval(() => {
+                let noteIdx = 0;
+
+                function playNextNote() {
                     if (!audioCtx) return;
+                    let note = tune[noteIdx % tune.length];
                     let osc = audioCtx.createOscillator();
                     let gain = audioCtx.createGain();
-                    
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(notes[index % notes.length], audioCtx.currentTime);
-                    
-                    gain.gain.setValueAtTime(0.03, audioCtx.currentTime); // Very soft background volume
-                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.2);
-                    
+
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(note.f, audioCtx.currentTime);
+
+                    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + note.d);
+
                     osc.connect(gain);
                     gain.connect(audioCtx.destination);
-                    
+
                     osc.start();
-                    osc.stop(audioCtx.currentTime + 1.2);
-                    
-                    index++;
-                }, 1400);
+                    osc.stop(audioCtx.currentTime + note.d);
+
+                    noteIdx++;
+                    bgMusicInterval = setTimeout(playNextNote, note.d * 1000 + 100);
+                }
+
+                playNextNote();
             } catch(e) {}
         }
 
@@ -383,7 +411,7 @@
         }
 
         function startExperience() {
-            startBackgroundMusic(); // Music starts right here on "Let's Start" click!
+            startHappyBirthdayTune();
             nextScreen(2);
         }
 
@@ -449,7 +477,7 @@
             alert('Hope this brought the biggest smile to your face, Falak! ✨💖');
         }
 
-        // Background Animation (Canvas Elements Strictly Behind Popups)
+        // Canvas Background Animation (Behind Cards)
         const canvas = document.getElementById("magicCanvas");
         const ctx = canvas.getContext("2d");
         canvas.width = window.innerWidth;
