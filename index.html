@@ -19,7 +19,7 @@
             position: relative;
         }
 
-        /* Magic Canvas */
+        /* Magic Canvas Background - Strictly Behind Everything */
         #magicCanvas {
             position: fixed;
             top: 0;
@@ -27,16 +27,35 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 1;
+            z-index: 1; 
         }
 
+        /* Floating Balloons Stage - Strictly Behind Pop-up Cards */
+        .balloon-stage {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 2;
+            overflow: hidden;
+            display: none;
+        }
+
+        .balloon-stage.active-stage {
+            display: block;
+            pointer-events: auto;
+        }
+
+        /* Pop-up Windows / Cards - Always on Top */
         .screen { 
             display: none; 
             width: 90%; 
             max-width: 420px; 
             padding: 20px; 
             text-align: center; 
-            z-index: 10;
+            z-index: 10; 
         }
 
         .screen.active { 
@@ -148,23 +167,6 @@
             100% { transform: scale(1); filter: drop-shadow(0 0 5px #ff79c6); }
         }
 
-        .balloon-stage {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 5;
-            overflow: hidden;
-            display: none;
-        }
-
-        .balloon-stage.active-stage {
-            display: block;
-            pointer-events: auto;
-        }
-
         .floating-balloon { 
             position: absolute;
             bottom: -150px;
@@ -214,40 +216,57 @@
 </head>
 <body>
 
+    <!-- Canvas Background Layer -->
     <canvas id="magicCanvas"></canvas>
+
+    <!-- Balloons Layer -->
     <div id="balloonStage" class="balloon-stage"></div>
 
+    <!-- Screen 1: New Intro Window (Let's Start) -->
     <div id="screen1" class="screen active">
+        <div class="card">
+            <span class="cake">✨</span>
+            <h1>Surprise Inside!</h1>
+            <p>Are you ready for your special gift, Falak? 🌸</p>
+            <button onclick="startExperience()">Let's Start ✨</button>
+        </div>
+    </div>
+
+    <!-- Screen 2: Special Day -->
+    <div id="screen2" class="screen">
         <div class="card">
             <span class="cake">🎂</span>
             <h1>It's Your Special Day</h1>
             <p>Yeyy!! 🎉 ✨</p>
-            <button onclick="nextScreen(2)">Let's Begin ✨</button>
+            <button onclick="nextScreen(3)">Next ✨</button>
         </div>
     </div>
 
-    <div id="screen2" class="screen">
+    <!-- Screen 3: Question -->
+    <div id="screen3" class="screen">
         <div class="card">
             <h3>Have a look at it,</h3>
             <h2 style="font-size: 36px;">Falak</h2>
             <p>Don't you dare say no! 🤫</p>
             <div class="btn-group">
-                <button onclick="nextScreen(3)">Yes! 💖</button>
+                <button onclick="nextScreen(4)">Yes! 💖</button>
                 <button class="no-btn" id="noBtn" onmouseover="moveBtn()" onclick="moveBtn()">No 🙈</button>
             </div>
         </div>
     </div>
 
-    <div id="screen3" class="screen">
+    <!-- Screen 4: Cake & Age -->
+    <div id="screen4" class="screen">
         <div class="card">
             <h1>Happy Birthday Falak! 🎉</h1>
             <div class="cake">🎂</div>
             <p>YOU ARE NOW <strong style="color: #ff79c6; font-size: 24px; text-shadow: 0 0 10px #ff79c6;">19</strong> Years Young! 🌸</p>
-            <button onclick="nextScreen(4)">Cut The Cake 🎂</button>
+            <button onclick="nextScreen(5)">Cut The Cake 🎂</button>
         </div>
     </div>
 
-    <div id="screen4" class="screen">
+    <!-- Screen 5: Heart Message -->
+    <div id="screen5" class="screen">
         <div class="card">
             <h3>💌 A Message From My Heart</h3>
             <p style="font-size: 15px; font-style: italic;">
@@ -261,62 +280,111 @@
         </div>
     </div>
 
-    <div id="screen5" class="screen">
+    <!-- Screen 6: Balloon Game -->
+    <div id="screen6" class="screen">
         <div class="card">
             <h2>Pop the Floating Balloons! 🎈</h2>
-            <p style="font-size: 14px;">Tap 5 floating balloons with ribbons as they fly up!</p>
-            <button id="finalBtn" class="hidden" onclick="nextScreen(6)">See the Final Wish ✨</button>
+            <p style="font-size: 14px;">Tap balloons as they fly up! (At least 5 to proceed)</p>
+            <button id="finalBtn" class="hidden" onclick="nextScreen(7)">See the Final Wish ✨</button>
         </div>
     </div>
 
-    <div id="screen6" class="screen">
+    <!-- Screen 7: Final Wish -->
+    <div id="screen7" class="screen">
         <div class="card">
             <h1>Falak</h1>
             <p style="font-size: 20px; color: #ff79c6; font-weight: 600;">✨ 19 & Shining ✨</p>
             <p>You're the best! Wishing you an epic amazing year ahead🥰 🎉🎉👏🥳! ❤️</p>
-            <button onclick="nextScreen(7)">Final Note ✨</button>
+            <button onclick="nextScreen(8)">Final Note ✨</button>
         </div>
     </div>
 
-    <div id="screen7" class="screen">
+    <!-- Screen 8: Final Note (Exact Requested Note) -->
+    <div id="screen8" class="screen">
         <div class="card">
             <h3>A Final Note ✨</h3>
             <p style="font-size: 17px; font-weight: 500; line-height: 1.6; text-shadow: 0 0 10px rgba(255, 121, 198, 0.4);">
                 Created just for you to make your day extra special! ❤️✨
             </p>
-            <button onclick="playFinishSound()">Finish ✨</button>
+            <button onclick="finishCelebration()">Finish ✨</button>
         </div>
     </div>
 
     <script>
-        // Web Audio API for Cute Click/Pop & Magic Sounds (No external audio files required!)
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        let audioCtx = null;
+        let bgMusicInterval = null;
 
-        function playPopSound() {
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-            let osc = audioCtx.createOscillator();
-            let gain = audioCtx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(400, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.1);
-            
-            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-            
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.1);
+        // Magical Background Melody Generator (Plays automatically after "Let's Start")
+        function startBackgroundMusic() {
+            if (bgMusicInterval) return;
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+
+                // Soft soothing notes progression (Happy Birthday tune vibe)
+                const notes = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 523.25];
+                let index = 0;
+
+                bgMusicInterval = setInterval(() => {
+                    if (!audioCtx) return;
+                    let osc = audioCtx.createOscillator();
+                    let gain = audioCtx.createGain();
+                    
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(notes[index % notes.length], audioCtx.currentTime);
+                    
+                    gain.gain.setValueAtTime(0.03, audioCtx.currentTime); // Very soft background volume
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.2);
+                    
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 1.2);
+                    
+                    index++;
+                }, 1400);
+            } catch(e) {}
         }
 
-        // Trigger Vibration on supported devices
+        function playPopSound() {
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(450, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(850, audioCtx.currentTime + 0.1);
+                
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.1);
+            } catch(e) {}
+        }
+
         function triggerVibration() {
             if ("vibrate" in navigator) {
-                navigator.vibrate(40); // 40ms light haptic feedback
+                try { navigator.vibrate(40); } catch(e) {}
             }
+        }
+
+        function startExperience() {
+            startBackgroundMusic(); // Music starts right here on "Let's Start" click!
+            nextScreen(2);
         }
 
         function nextScreen(s) {
@@ -328,6 +396,7 @@
         }
 
         function moveBtn() {
+            playPopSound();
             triggerVibration();
             let b = document.getElementById("noBtn");
             b.style.position = "fixed";
@@ -339,7 +408,7 @@
         function startBalloonGame() {
             playPopSound();
             triggerVibration();
-            nextScreen(5);
+            nextScreen(6);
             const stage = document.getElementById('balloonStage');
             stage.innerHTML = '';
             stage.classList.add('active-stage');
@@ -347,11 +416,11 @@
 
             const colors = ['#ff4b2b', '#ff79c6', '#8be9fd', '#bd93f9', '#f1fa8c', '#ff922b'];
 
-            for (let i = 0; i < 12; i++) {
+            for (let i = 0; i < 15; i++) {
                 let b = document.createElement("div");
                 b.className = "floating-balloon";
                 b.style.backgroundColor = colors[i % colors.length];
-                b.style.left = Math.random() * 80 + 10 + "vw";
+                b.style.left = Math.random() * 85 + 5 + "vw";
                 b.style.animationDelay = (Math.random() * 4) + "s";
                 b.style.animationDuration = (Math.random() * 3 + 4.5) + "s";
 
@@ -374,12 +443,13 @@
             }
         }
 
-        function playFinishSound() {
+        function finishCelebration() {
             playPopSound();
             triggerVibration();
-            alert('Hope this brought a big smile to your face! ✨');
+            alert('Hope this brought the biggest smile to your face, Falak! ✨💖');
         }
 
+        // Background Animation (Canvas Elements Strictly Behind Popups)
         const canvas = document.getElementById("magicCanvas");
         const ctx = canvas.getContext("2d");
         canvas.width = window.innerWidth;
@@ -388,13 +458,13 @@
         const particles = [];
         const symbols = ['🌸', '✨', '💖', '⭐', '🌹', '🎉'];
 
-        for (let i = 0; i < 25; i++) { 
+        for (let i = 0; i < 22; i++) { 
             particles.push({
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
                 size: Math.random() * 14 + 10,
-                speedY: Math.random() * 0.9 + 0.3,
-                speedX: Math.random() * 0.6 - 0.3,
+                speedY: Math.random() * 0.8 + 0.3,
+                speedX: Math.random() * 0.5 - 0.25,
                 symbol: symbols[Math.floor(Math.random() * symbols.length)]
             });
         }
