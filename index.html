@@ -279,12 +279,21 @@
             <h1>Happy Birthday Falak! 🎉</h1>
             <div class="cake">🎂</div>
             <p>YOU ARE NOW <strong style="color: #ff79c6; font-size: 24px; text-shadow: 0 0 10px #ff79c6;">19</strong> Years Young! 🌸</p>
-            <button onclick="nextScreen(5)">Cut The Cake 🎂</button>
+            <button onclick="startBalloonGame()">Cut The Cake 🎂</button>
         </div>
     </div>
 
-    <!-- Screen 5: Heart Message (Formatted as Requested) -->
+    <!-- Screen 5: Balloon Game (Right after Happy Birthday) -->
     <div id="screen5" class="screen">
+        <div class="card">
+            <h2>Pop the Floating Balloons! 🎈</h2>
+            <p style="font-size: 14px;">Tap balloons as they fly up!</p>
+            <button id="finalBtn" class="hidden" onclick="nextScreen(6)">Next ✨</button>
+        </div>
+    </div>
+
+    <!-- Screen 6: Heart Message (Prayers / Best Wishes) -->
+    <div id="screen6" class="screen">
         <div class="card">
             <h3>💌 A Message From My Heart</h3>
             <div class="msg-text">
@@ -294,20 +303,11 @@
                 <span>🎀May your life be filled with joy, health, and peace🧸.</span>
                 <span>✨May all your dreams come true.✨💖</span>
             </div>
-            <button onclick="startBalloonGame()">Pop The Balloons 🎈</button>
+            <button onclick="nextScreen(7)">Next ✨</button>
         </div>
     </div>
 
-    <!-- Screen 6: Balloon Game -->
-    <div id="screen6" class="screen">
-        <div class="card">
-            <h2>Pop the Floating Balloons! 🎈</h2>
-            <p style="font-size: 14px;">Tap balloons as they fly up!</p>
-            <button id="finalBtn" class="hidden" onclick="nextScreen(7)">See the Final Wish ✨</button>
-        </div>
-    </div>
-
-    <!-- Screen 7: Final Wish -->
+    <!-- Screen 7: 19 & Shining -->
     <div id="screen7" class="screen">
         <div class="card">
             <h1>Falak</h1>
@@ -317,11 +317,10 @@
         </div>
     </div>
 
-    <!-- Screen 8: Final Note -->
+    <!-- Screen 8: Final Text Message (Heading Removed) -->
     <div id="screen8" class="screen">
         <div class="card">
-            <h3>A Final Note ✨</h3>
-            <p style="font-size: 17px; font-weight: 500; line-height: 1.6; text-shadow: 0 0 10px rgba(255, 121, 198, 0.4);">
+            <p style="font-size: 18px; font-weight: 500; line-height: 1.6; text-shadow: 0 0 10px rgba(255, 121, 198, 0.4); margin-bottom: 25px; margin-top: 10px;">
                 Created just for you to make your day extra special! ❤️✨
             </p>
             <button onclick="finishCelebration()">Finish ✨</button>
@@ -343,7 +342,6 @@
                     audioCtx.resume();
                 }
 
-                // Happy Birthday Tune Notes (G4, G4, A4, G4, C5, B4...)
                 const tune = [
                     {f: 392.00, d: 0.3}, {f: 392.00, d: 0.3}, {f: 440.00, d: 0.6}, {f: 392.00, d: 0.6}, {f: 523.25, d: 0.6}, {f: 493.88, d: 1.0},
                     {f: 392.00, d: 0.3}, {f: 392.00, d: 0.3}, {f: 440.00, d: 0.6}, {f: 392.00, d: 0.6}, {f: 587.33, d: 0.6}, {f: 523.25, d: 1.0},
@@ -436,7 +434,7 @@
         function startBalloonGame() {
             playPopSound();
             triggerVibration();
-            nextScreen(6);
+            nextScreen(5);
             const stage = document.getElementById('balloonStage');
             stage.innerHTML = '';
             stage.classList.add('active-stage');
