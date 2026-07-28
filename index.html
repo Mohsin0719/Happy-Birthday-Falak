@@ -124,7 +124,6 @@
             line-height: 1.6;
         }
 
-        /* Custom formatting for letter lines */
         .msg-text {
             font-size: 14px;
             font-style: italic;
@@ -283,7 +282,7 @@
         </div>
     </div>
 
-    <!-- Screen 5: Balloon Game (Right after Happy Birthday) -->
+    <!-- Screen 5: Balloon Game -->
     <div id="screen5" class="screen">
         <div class="card">
             <h2>Pop the Floating Balloons! 🎈</h2>
@@ -292,7 +291,7 @@
         </div>
     </div>
 
-    <!-- Screen 6: Heart Message (Prayers / Best Wishes) -->
+    <!-- Screen 6: Heart Message -->
     <div id="screen6" class="screen">
         <div class="card">
             <h3>💌 A Message From My Heart</h3>
@@ -317,7 +316,7 @@
         </div>
     </div>
 
-    <!-- Screen 8: Final Text Message (Heading Removed) -->
+    <!-- Screen 8: Final Text Message -->
     <div id="screen8" class="screen">
         <div class="card">
             <p style="font-size: 18px; font-weight: 500; line-height: 1.6; text-shadow: 0 0 10px rgba(255, 121, 198, 0.4); margin-bottom: 25px; margin-top: 10px;">
@@ -329,11 +328,11 @@
 
     <script>
         let audioCtx = null;
-        let bgMusicInterval = null;
+        let isMusicPlaying = false;
 
-        // Happy Birthday Melody Generator
-        function startHappyBirthdayTune() {
-            if (bgMusicInterval) return;
+        // Non-stop Happy Birthday Background Music Loop
+        function startContinuousMusic() {
+            if (isMusicPlaying) return;
             try {
                 if (!audioCtx) {
                     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -341,6 +340,8 @@
                 if (audioCtx.state === 'suspended') {
                     audioCtx.resume();
                 }
+
+                isMusicPlaying = true;
 
                 const tune = [
                     {f: 392.00, d: 0.3}, {f: 392.00, d: 0.3}, {f: 440.00, d: 0.6}, {f: 392.00, d: 0.6}, {f: 523.25, d: 0.6}, {f: 493.88, d: 1.0},
@@ -351,8 +352,7 @@
 
                 let noteIdx = 0;
 
-                function playNextNote() {
-                    if (!audioCtx) return;
+                function scheduleNextNote() {
                     let note = tune[noteIdx % tune.length];
                     let osc = audioCtx.createOscillator();
                     let gain = audioCtx.createGain();
@@ -370,28 +370,23 @@
                     osc.stop(audioCtx.currentTime + note.d);
 
                     noteIdx++;
-                    bgMusicInterval = setTimeout(playNextNote, note.d * 1000 + 100);
+                    setTimeout(scheduleNextNote, (note.d * 1000) + 120);
                 }
 
-                playNextNote();
+                scheduleNextNote();
             } catch(e) {}
         }
 
         function playPopSound() {
             try {
-                if (!audioCtx) {
-                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                }
-                if (audioCtx.state === 'suspended') {
-                    audioCtx.resume();
-                }
+                if (!audioCtx) return;
                 let osc = audioCtx.createOscillator();
                 let gain = audioCtx.createGain();
                 osc.type = 'sine';
                 osc.frequency.setValueAtTime(450, audioCtx.currentTime);
                 osc.frequency.exponentialRampToValueAtTime(850, audioCtx.currentTime + 0.1);
                 
-                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
                 
                 osc.connect(gain);
@@ -409,7 +404,7 @@
         }
 
         function startExperience() {
-            startHappyBirthdayTune();
+            startContinuousMusic();
             nextScreen(2);
         }
 
@@ -475,7 +470,7 @@
             alert('Hope this brought the biggest smile to your face, Falak! ✨💖');
         }
 
-        // Canvas Background Animation (Behind Cards)
+        // Canvas Background Animation
         const canvas = document.getElementById("magicCanvas");
         const ctx = canvas.getContext("2d");
         canvas.width = window.innerWidth;
