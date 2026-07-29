@@ -25,7 +25,7 @@
             position: relative;
         }
 
-        /* Floating Elements Container (Top to Bottom) */
+        /* 1. BACKGROUND FLOATING ELEMENTS (Starts strictly AFTER Screen 1) */
         #flowerContainer {
             position: fixed;
             top: 0;
@@ -35,28 +35,29 @@
             z-index: 1;
             pointer-events: none;
             overflow: hidden;
+            display: none;
         }
 
         .floating-flower {
             position: absolute;
             user-select: none;
             pointer-events: none;
-            animation: floatDownFlower 6.5s linear infinite;
-            filter: drop-shadow(0 0 6px rgba(255, 121, 198, 0.6));
+            animation: floatDownSlow 12s linear infinite;
+            filter: drop-shadow(0 0 6px rgba(255, 121, 198, 0.5));
         }
 
-        @keyframes floatDownFlower {
+        @keyframes floatDownSlow {
             0% {
                 transform: translateY(-12vh) rotate(0deg) scale(0.8);
-                opacity: 0.95;
+                opacity: 0.9;
             }
             100% {
-                transform: translateY(108vh) rotate(360deg) scale(1.15);
+                transform: translateY(108vh) rotate(360deg) scale(1.1);
                 opacity: 0.15;
             }
         }
 
-        /* Balloon Stage Layer */
+        /* 2. BALLOON STAGE LAYER */
         .balloon-stage {
             position: fixed;
             top: 0;
@@ -67,7 +68,7 @@
             pointer-events: none;
         }
 
-        /* Perfectly Centered Screens */
+        /* 3. SCREENS & CARDS */
         .screen {
             display: none;
             position: fixed;
@@ -75,16 +76,16 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: 20;
+            z-index: 50;
             justify-content: center;
             align-items: center;
-            padding: 15px;
+            padding: 20px;
             pointer-events: auto;
         }
 
         .screen.active {
             display: flex !important;
-            animation: fadeIn 0.2s ease-out forwards;
+            animation: fadeIn 0.25s ease-out forwards;
         }
 
         .card {
@@ -93,18 +94,17 @@
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 24px;
-            padding: 28px 20px;
+            padding: 30px 22px;
             width: 100%;
-            max-width: 380px;
+            max-width: 360px;
             text-align: center;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 121, 198, 0.25);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            margin: auto;
             position: relative;
-            z-index: 30;
+            z-index: 60;
         }
 
         h1 {
@@ -168,9 +168,9 @@
             border-radius: 30px;
             cursor: pointer;
             box-shadow: 0 5px 15px rgba(255, 121, 198, 0.4);
-            transition: transform 0.1s ease, background 0.3s ease;
+            transition: transform 0.1s ease;
             position: relative;
-            z-index: 40;
+            z-index: 70;
             pointer-events: auto !important;
         }
 
@@ -190,8 +190,6 @@
         .no-btn {
             background: rgba(255, 255, 255, 0.2);
             box-shadow: none;
-            position: relative;
-            transition: transform 0.2s ease;
         }
 
         .msg-text span {
@@ -206,45 +204,79 @@
             display: none !important;
         }
 
-        /* Balloon with Hanging Ribbon */
+        /* 4. BALLOONS FLOATING FROM BOTTOM TO TOP (With Balloon on Top & Ribbon Hanging Below) */
         .balloon-wrapper {
             position: absolute;
-            width: 55px;
-            height: 65px;
+            width: 60px;
+            height: 95px;
             cursor: pointer;
             z-index: 100;
             pointer-events: auto;
-            animation: floatUp 4.2s linear forwards;
+            animation: floatUpBalloon 5.5s linear forwards;
             touch-action: manipulation;
         }
 
+        /* Popping Burst Animation */
+        .balloon-wrapper.popping {
+            animation: popExplode 0.2s ease-out forwards !important;
+            pointer-events: none;
+        }
+
+        @keyframes popExplode {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.35); opacity: 0.8; filter: brightness(1.8); }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+        /* Balloon Face/Body At Top */
         .balloon-body {
             width: 55px;
             height: 65px;
-            background: #ff79c6;
             border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
-            box-shadow: inset -6px -6px 12px rgba(0,0,0,0.2), 0 5px 15px rgba(255, 121, 198, 0.5);
+            box-shadow: inset -6px -6px 12px rgba(0,0,0,0.2), 0 5px 15px rgba(255, 121, 198, 0.4);
             position: relative;
+            margin: 0 auto;
         }
 
+        /* Knot at bottom of balloon */
+        .balloon-body::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 5px;
+            background: inherit;
+            border-radius: 3px 3px 5px 5px;
+        }
+
+        /* Ribbon Hanging Below Balloon Body */
         .balloon-ribbon {
             position: absolute;
-            top: 63px;
-            left: 26px;
+            top: 68px;
+            left: 50%;
             width: 2px;
             height: 32px;
             background: rgba(255, 255, 255, 0.85);
-            border-radius: 2px;
-            box-shadow: 0 0 4px rgba(255,255,255,0.5);
+            transform-origin: top center;
+            animation: ribbonSway 1.2s ease-in-out infinite alternate;
+            border-radius: 50%;
+            box-shadow: 0 0 3px rgba(255,255,255,0.6);
         }
 
-        @keyframes floatUp {
-            0% { bottom: -100px; opacity: 1; }
-            100% { bottom: 108vh; opacity: 0.9; }
+        @keyframes ribbonSway {
+            0% { transform: translateX(-50%) rotate(-10deg); }
+            100% { transform: translateX(-50%) rotate(10deg); }
+        }
+
+        @keyframes floatUpBalloon {
+            0% { bottom: -110px; opacity: 1; }
+            100% { bottom: 108vh; opacity: 0.95; }
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.98); }
+            from { opacity: 0; transform: scale(0.97); }
             to { opacity: 1; transform: scale(1); }
         }
     </style>
@@ -253,10 +285,10 @@
 
     <!-- Audio Element -->
     <audio id="bgMusic" loop preload="auto">
-        <source src="Birthday-tone.m4a" type="audio/mp4">
+        <source src="birthday-tone.m4a" type="audio/mp4">
     </audio>
 
-    <!-- Top to Bottom Rich Floating Elements Container -->
+    <!-- Background Container (Hidden on Screen 1) -->
     <div id="flowerContainer"></div>
 
     <!-- Balloon Game Container -->
@@ -366,40 +398,46 @@
         </div>
     </div>
 
-    <!-- JavaScript Execution -->
+    <!-- JavaScript Logic -->
     <script>
         let poppedCount = 0;
         let balloonInterval = null;
+        let elementsStarted = false;
 
-        // Floating Rich Elements (Top to Bottom with Flowers, Hearts, and Fireworks)
-        function createFlowers() {
+        // Slow & Gentle Background Floating Elements (Triggered past Screen 1)
+        function startFloatingElements() {
+            if (elementsStarted) return;
+            elementsStarted = true;
+
             const container = document.getElementById('flowerContainer');
-            const items = ['🌸', '🌺', '🌹', '🌼', '💖', '💓', '✨', '💫', '🎉', '🎊', '🌸', '💖'];
+            container.style.display = 'block';
+
+            const items = ['🌸', '🌺', '💖', '💗', '💓','✨', '🎉', '🎊'];
             
             setInterval(() => {
-                const flower = document.createElement('div');
-                flower.className = 'floating-flower';
-                flower.innerText = items[Math.floor(Math.random() * items.length)];
-                flower.style.left = Math.random() * 92 + 'vw';
-                flower.style.animationDuration = (Math.random() * 3 + 5) + 's';
-                flower.style.fontSize = (Math.random() * 14 + 22) + 'px';
+                const el = document.createElement('div');
+                el.className = 'floating-flower';
+                el.innerText = items[Math.floor(Math.random() * items.length)];
+                el.style.left = Math.random() * 92 + 'vw';
+                el.style.animationDuration = (Math.random() * 4 + 10) + 's';
+                el.style.fontSize = (Math.random() * 12 + 20) + 'px';
                 
-                container.appendChild(flower);
+                container.appendChild(el);
 
                 setTimeout(() => {
-                    flower.remove();
-                }, 7000);
-            }, 380);
+                    el.remove();
+                }, 13000);
+            }, 600);
         }
 
-        createFlowers();
-
-        // Audio & Instant Screen Switching
+        // Start Experience on Screen 1 Click
         function startExperience() {
             const audio = document.getElementById('bgMusic');
             if (audio) {
                 audio.play().catch(e => console.log("Audio info: ", e));
             }
+            
+            startFloatingElements();
             nextScreen(2);
         }
 
@@ -418,7 +456,7 @@
             btn.style.transform = `translate(${x}px, ${y}px)`;
         }
 
-        // Fast Balloon Pop Logic
+        // Balloon Game (Bottom to Top with Swaying Ribbons Below)
         function startBalloonGame() {
             nextScreen(5);
             poppedCount = 0;
@@ -446,6 +484,10 @@
                 const popMe = function(e) {
                     e.preventDefault();
                     e.stopPropagation();
+
+                    if (wrapper.classList.contains('popping')) return;
+                    
+                    wrapper.classList.add('popping');
                     poppedCount++;
                     
                     const progressText = document.getElementById('gameProgressText');
@@ -453,7 +495,9 @@
                         progressText.innerText = `Tap 5 balloons! (${poppedCount}/5)`;
                     }
 
-                    wrapper.remove();
+                    setTimeout(() => {
+                        wrapper.remove();
+                    }, 200);
 
                     if (poppedCount >= 5) {
                         clearInterval(balloonInterval);
@@ -470,10 +514,12 @@
                 stage.appendChild(wrapper);
 
                 setTimeout(() => {
-                    if (wrapper.parentNode) wrapper.remove();
-                }, 4200);
+                    if (wrapper.parentNode && !wrapper.classList.contains('popping')) {
+                        wrapper.remove();
+                    }
+                }, 5500);
 
-            }, 600);
+            }, 750);
         }
 
         function finishCelebration() {
