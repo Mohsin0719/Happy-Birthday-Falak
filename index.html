@@ -6,23 +6,214 @@
     <title>Happy Birthday Falak!</title>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
-    <!-- Style CSS Link -->
-    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body, html {
+            background-color: #0d0d1a;
+            color: #ffffff;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        #magicCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .balloon-stage {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* 100% Guaranteed Perfect Centering Layout */
+        .screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 10;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .screen.active {
+            display: flex;
+            animation: fadeIn 0.5s ease-in-out forwards;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: 30px 24px;
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 121, 198, 0.25);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 700;
+            color: #ff79c6;
+            margin: 12px 0;
+            text-shadow: 0 0 12px rgba(255, 121, 198, 0.5);
+        }
+
+        h2 {
+            font-size: 22px;
+            color: #bd93f9;
+        }
+
+        h3 {
+            font-size: 18px;
+            font-weight: 400;
+            color: #f1f1f1;
+        }
+
+        p {
+            font-size: 14px;
+            color: #e0e0e0;
+            margin-bottom: 18px;
+            line-height: 1.5;
+        }
+
+        .date-badge {
+            background: rgba(255, 255, 255, 0.12);
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #f1f1f1;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .cake {
+            font-size: 48px;
+            margin: 10px 0;
+            display: inline-block;
+        }
+
+        .from-tag {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ff79c6;
+            margin: 8px 0 16px 0;
+            font-style: italic;
+        }
+
+        button {
+            background: linear-gradient(135deg, #ff79c6, #ff5555);
+            color: #ffffff;
+            border: none;
+            padding: 12px 28px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 121, 198, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            position: relative;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .no-btn {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: none;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .msg-text span {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #f1f1f1;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .pop-balloon {
+            position: absolute;
+            width: 45px;
+            height: 55px;
+            background: #ff79c6;
+            border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+            cursor: pointer;
+            z-index: 100;
+            pointer-events: auto;
+            animation: floatUp 4s linear forwards;
+        }
+
+        @keyframes floatUp {
+            0% { bottom: -60px; opacity: 1; }
+            100% { bottom: 105vh; opacity: 0.8; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
 </head>
 <body>
 
-    <!-- Audio Track from GitHub Repository -->
+    <!-- Audio Track -->
     <audio id="bgMusic" loop preload="auto">
         <source src="birthday-tone.m4a" type="audio/mp4">
     </audio>
 
-    <!-- Animated Magic Canvas Background Layer -->
+    <!-- Canvas Background -->
     <canvas id="magicCanvas"></canvas>
 
-    <!-- Floating Interactive Balloons Stage -->
+    <!-- Balloon Stage -->
     <div id="balloonStage" class="balloon-stage"></div>
 
-    <!-- Screen 1: Initial Entry -->
+    <!-- Screen 1 -->
     <div id="screen1" class="screen active">
         <div class="card">
             <div class="date-badge">📅 03 August 2026</div>
@@ -33,7 +224,7 @@
         </div>
     </div>
 
-    <!-- Screen 2: Warm Welcome -->
+    <!-- Screen 2 -->
     <div id="screen2" class="screen">
         <div class="card">
             <span class="cake">🎂</span>
@@ -43,7 +234,7 @@
         </div>
     </div>
 
-    <!-- Screen 3: Interactive Choice Screen -->
+    <!-- Screen 3 -->
     <div id="screen3" class="screen">
         <div class="card">
             <h3>Have a look at it,</h3>
@@ -56,7 +247,7 @@
         </div>
     </div>
 
-    <!-- Screen 4: Cake Cutting & Age Milestone -->
+    <!-- Screen 4 -->
     <div id="screen4" class="screen">
         <div class="card">
             <div class="date-badge">🎈 03 August 2026 🎈</div>
@@ -68,7 +259,7 @@
         </div>
     </div>
 
-    <!-- Screen 5: Mini Balloon Pop Game -->
+    <!-- Screen 5 -->
     <div id="screen5" class="screen">
         <div class="card">
             <h2>Pop the Floating Balloons! 🎈</h2>
@@ -77,7 +268,7 @@
         </div>
     </div>
 
-    <!-- Screen 6: Heartfelt Wishes Message -->
+    <!-- Screen 6 -->
     <div id="screen6" class="screen">
         <div class="card">
             <h3>💌 A Special Message for you! ✨</h3>
@@ -92,7 +283,7 @@
         </div>
     </div>
 
-    <!-- Screen 7: Personal Note Screen -->
+    <!-- Screen 7 -->
     <div id="screen7" class="screen">
         <div class="card">
             <div class="date-badge">✨ 03 August 2026 ✨</div>
@@ -104,7 +295,7 @@
         </div>
     </div>
 
-    <!-- Screen 8: Personal Highlight Screen -->
+    <!-- Screen 8 -->
     <div id="screen8" class="screen">
         <div class="card">
             <div class="date-badge">✨ 03 August 2026 ✨</div>
@@ -115,7 +306,7 @@
         </div>
     </div>
 
-    <!-- Screen 9: Closing Signature Screen -->
+    <!-- Screen 9 -->
     <div id="screen9" class="screen">
         <div class="card">
             <p style="font-size: 18px; font-weight: 500; line-height: 1.6; text-shadow: 0 0 10px rgba(255, 121, 198, 0.4); margin-bottom: 15px; margin-top: 10px;">
@@ -126,7 +317,126 @@
         </div>
     </div>
 
-    <!-- Script JS Link -->
-    <script src="script.js"></script>
+    <!-- Embedded JavaScript -->
+    <script>
+        let poppedCount = 0;
+
+        const canvas = document.getElementById('magicCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particles = [];
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5;
+                this.color = `hsl(${Math.random() * 60 + 300}, 100%, 75%)`;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < 60; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+
+        initParticles();
+        animateParticles();
+
+        function startExperience() {
+            const audio = document.getElementById('bgMusic');
+            if (audio) {
+                audio.play().catch(e => console.log("Audio play issue: ", e));
+            }
+            nextScreen(2);
+        }
+
+        function nextScreen(screenNum) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            const target = document.getElementById(`screen${screenNum}`);
+            if (target) {
+                target.classList.add('active');
+            }
+        }
+
+        function moveBtn() {
+            const btn = document.getElementById('noBtn');
+            const x = Math.random() * 160 - 80;
+            const y = Math.random() * 160 - 80;
+            btn.style.transform = `translate(${x}px, ${y}px)`;
+        }
+
+        function startBalloonGame() {
+            nextScreen(5);
+            const stage = document.getElementById('balloonStage');
+            
+            let interval = setInterval(() => {
+                if (poppedCount >= 5) {
+                    clearInterval(interval);
+                    return;
+                }
+
+                const balloon = document.createElement('div');
+                balloon.className = 'pop-balloon';
+                balloon.style.left = Math.random() * (window.innerWidth - 60) + 'px';
+                balloon.style.backgroundColor = `hsl(${Math.random() * 360}, 80%, 65%)`;
+
+                balloon.onclick = function() {
+                    poppedCount++;
+                    this.remove();
+                    if (poppedCount >= 5) {
+                        document.getElementById('finalBtn').classList.remove('hidden');
+                    }
+                };
+
+                stage.appendChild(balloon);
+
+                setTimeout(() => {
+                    if (balloon.parentNode) balloon.remove();
+                }, 4000);
+
+            }, 800);
+        }
+
+        function finishCelebration() {
+            alert("✨ Your wish has been sent into the stars! Happy Birthday Falak! 🎉💖");
+        }
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initParticles();
+        });
+    </script>
 </body>
 </html>
