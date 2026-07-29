@@ -272,9 +272,9 @@
 </head>
 <body>
 
-    <!-- Background Audio Element -->
+    <!-- Updated Direct MP3 Audio Link with Vocal Song -->
     <audio id="bgMusic" loop preload="auto">
-        <source src="https://assets.mixkit.co/music/preview/mixkit-a-very-happy-christmas-897.mp3" type="audio/mpeg">
+        <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a77d13.mp3?filename=happy-birthday-15243.mp3" type="audio/mpeg">
     </audio>
 
     <!-- Canvas Background Layer -->
@@ -378,7 +378,7 @@
     <script>
         function playBackgroundMusic() {
             const music = document.getElementById("bgMusic");
-            music.volume = 0.5; // Smooth volume level
+            music.volume = 0.6; 
             music.play().catch(e => console.log("Audio play blocked by browser:", e));
         }
 
