@@ -18,13 +18,13 @@
         body, html {
             background-color: #0d0d1a;
             color: #ffffff;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             overflow: hidden;
             position: relative;
         }
 
-        /* Floating Flowers & Stars Container */
+        /* Floating Flowers Background Container */
         #flowerContainer {
             position: fixed;
             top: 0;
@@ -33,33 +33,39 @@
             height: 100vh;
             z-index: 1;
             pointer-events: none;
+            overflow: hidden;
         }
 
-        .flower {
+        .floating-flower {
             position: absolute;
-            font-size: 20px;
             user-select: none;
-            animation: floatUpFlower 8s linear infinite;
-            opacity: 0.7;
+            animation: floatUpFlower 7s linear infinite;
+            filter: drop-shadow(0 0 6px rgba(255, 121, 198, 0.6));
         }
 
         @keyframes floatUpFlower {
-            0% { transform: translateY(105vh) rotate(0deg); opacity: 0.8; }
-            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+            0% {
+                transform: translateY(105vh) rotate(0deg) scale(0.8);
+                opacity: 0.9;
+            }
+            100% {
+                transform: translateY(-10vh) rotate(360deg) scale(1.2);
+                opacity: 0.1;
+            }
         }
 
-        /* Balloons Layer */
+        /* Balloon Stage Layer */
         .balloon-stage {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: 20;
+            z-index: 50;
             pointer-events: auto;
         }
 
-        /* Perfectly Centered Screens */
+        /* Perfectly Centered Screen Cards */
         .screen {
             display: none;
             position: fixed;
@@ -192,38 +198,41 @@
             display: none !important;
         }
 
-        /* Balloons with Beautiful Curly Ribbons */
+        /* Balloons with Hanging Curly Ribbons */
         .balloon-wrapper {
             position: absolute;
-            width: 50px;
-            height: 60px;
+            width: 55px;
+            height: 65px;
             cursor: pointer;
             z-index: 100;
             pointer-events: auto;
-            animation: floatUp 4s linear forwards;
+            animation: floatUp 4.2s linear forwards;
+            touch-action: manipulation;
         }
 
         .balloon-body {
-            width: 50px;
-            height: 60px;
+            width: 55px;
+            height: 65px;
             background: #ff79c6;
             border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
-            box-shadow: inset -5px -5px 12px rgba(0,0,0,0.15), 0 5px 15px rgba(255, 121, 198, 0.4);
+            box-shadow: inset -6px -6px 12px rgba(0,0,0,0.2), 0 5px 15px rgba(255, 121, 198, 0.5);
             position: relative;
         }
 
+        /* Ribbon Thread */
         .balloon-ribbon {
             position: absolute;
-            top: 58px;
-            left: 23px;
+            top: 63px;
+            left: 26px;
             width: 2px;
-            height: 28px;
-            background: rgba(255, 255, 255, 0.8);
+            height: 32px;
+            background: rgba(255, 255, 255, 0.85);
             border-radius: 2px;
+            box-shadow: 0 0 4px rgba(255,255,255,0.5);
         }
 
         @keyframes floatUp {
-            0% { bottom: -90px; opacity: 1; }
+            0% { bottom: -100px; opacity: 1; }
             100% { bottom: 108vh; opacity: 0.9; }
         }
 
@@ -235,15 +244,15 @@
 </head>
 <body>
 
-    <!-- Audio Element -->
+    <!-- Audio Tag -->
     <audio id="bgMusic" loop preload="auto">
         <source src="birthday-tone.m4a" type="audio/mp4">
     </audio>
 
-    <!-- Floating Flowers Container -->
+    <!-- Floating Flowers Background Container -->
     <div id="flowerContainer"></div>
 
-    <!-- Balloon Game Container -->
+    <!-- Balloon Game Container Layer -->
     <div id="balloonStage" class="balloon-stage"></div>
 
     <!-- Screen 1 -->
@@ -292,7 +301,7 @@
         </div>
     </div>
 
-    <!-- Screen 5: Balloon Game -->
+    <!-- Screen 5: Balloon Pop Game -->
     <div id="screen5" class="screen">
         <div class="card">
             <h2>Pop the Floating Balloons! 🎈</h2>
@@ -350,35 +359,35 @@
         </div>
     </div>
 
-    <!-- JavaScript Execution -->
+    <!-- JavaScript Logic -->
     <script>
         let poppedCount = 0;
         let balloonInterval = null;
 
-        // Generate Floating Flowers in Background
+        // Generate Big Beautiful Floating Flowers & Emojis
         function createFlowers() {
             const container = document.getElementById('flowerContainer');
-            const icons = ['🌸', '🌺', '✨', '🌼', '💖', '⭐'];
+            const items = ['🌸', '🌺', '🌹', '🌼', '💖', '✨', '🌸'];
             
             setInterval(() => {
                 const flower = document.createElement('div');
-                flower.className = 'flower';
-                flower.innerText = icons[Math.floor(Math.random() * icons.length)];
-                flower.style.left = Math.random() * 95 + 'vw';
-                flower.style.animationDuration = (Math.random() * 4 + 5) + 's';
-                flower.style.fontSize = (Math.random() * 12 + 16) + 'px';
+                flower.className = 'floating-flower';
+                flower.innerText = items[Math.floor(Math.random() * items.length)];
+                flower.style.left = Math.random() * 92 + 'vw';
+                flower.style.animationDuration = (Math.random() * 3 + 5) + 's';
+                flower.style.fontSize = (Math.random() * 14 + 22) + 'px'; // Big Clear Size
                 
                 container.appendChild(flower);
 
                 setTimeout(() => {
                     flower.remove();
-                }, 8500);
-            }, 600);
+                }, 7500);
+            }, 450);
         }
 
         createFlowers();
 
-        // Audio & Screen Transitions
+        // Audio & Screen Navigation
         function startExperience() {
             const audio = document.getElementById('bgMusic');
             if (audio) {
@@ -419,16 +428,16 @@
 
                 const wrapper = document.createElement('div');
                 wrapper.className = 'balloon-wrapper';
-                wrapper.style.left = Math.random() * (window.innerWidth - 70) + 'px';
+                wrapper.style.left = Math.random() * (window.innerWidth - 75) + 'px';
 
                 const hue = Math.floor(Math.random() * 360);
                 wrapper.innerHTML = `
-                    <div class="balloon-body" style="background: hsl(${hue}, 85%, 65%); box-shadow: inset -5px -5px 12px rgba(0,0,0,0.15), 0 5px 15px hsl(${hue}, 85%, 65%, 0.4);"></div>
+                    <div class="balloon-body" style="background: hsl(${hue}, 85%, 65%); box-shadow: inset -6px -6px 12px rgba(0,0,0,0.2), 0 5px 15px hsl(${hue}, 85%, 65%, 0.5);"></div>
                     <div class="balloon-ribbon"></div>
                 `;
 
-                // Pop Handler on Touch / Click
                 const popMe = function(e) {
+                    e.preventDefault();
                     e.stopPropagation();
                     poppedCount++;
                     
@@ -448,16 +457,16 @@
                     }
                 };
 
+                wrapper.addEventListener('pointerdown', popMe);
                 wrapper.addEventListener('click', popMe);
-                wrapper.addEventListener('touchstart', popMe);
 
                 stage.appendChild(wrapper);
 
                 setTimeout(() => {
                     if (wrapper.parentNode) wrapper.remove();
-                }, 4000);
+                }, 4200);
 
-            }, 650);
+            }, 600);
         }
 
         function finishCelebration() {
