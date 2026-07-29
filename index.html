@@ -25,24 +25,24 @@
             position: relative;
         }
 
-        /* 1. BACKGROUND FLOATING ELEMENTS (Strictly Disabled on Screen 1) */
+        /* 1. BACKGROUND FLOATING EMOJIS (Strictly Disabled on Screen 1) */
         #flowerContainer {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: 1; /* Lowest background layer */
+            z-index: 1;
             pointer-events: none;
             overflow: hidden;
-            display: none !important; /* Force hidden initially */
+            display: none !important;
         }
 
         .floating-flower {
             position: absolute;
             user-select: none;
             pointer-events: none;
-            animation: floatDownSlow 22s linear infinite; /* Extremely slow & subtle */
+            animation: floatDownSlow 22s linear infinite;
             filter: drop-shadow(0 0 6px rgba(255, 121, 198, 0.4));
             opacity: 0.8;
         }
@@ -69,7 +69,7 @@
             pointer-events: none;
         }
 
-        /* 3. SCREENS & CARDS (High Z-Index to keep text clear & clean) */
+        /* 3. SCREENS & CARDS */
         .screen {
             display: none;
             position: fixed;
@@ -205,7 +205,7 @@
             display: none !important;
         }
 
-        /* 4. REALISTIC BALLOONS (Natural Shape + Knot + Curved SVG Thread) */
+        /* 4. REALISTIC BALLOONS (Natural Shape + Knot + Wavy Ribbon) */
         .balloon-wrapper {
             position: absolute;
             width: 65px;
@@ -217,7 +217,6 @@
             touch-action: manipulation;
         }
 
-        /* Popping Burst Animation */
         .balloon-wrapper.popping {
             animation: popExplode 0.2s ease-out forwards !important;
             pointer-events: none;
@@ -280,7 +279,7 @@
 
     <!-- Audio Element -->
     <audio id="bgMusic" loop preload="auto">
-        <source src="birthday-tone.m4a" type="audio/mp4">
+        <source src="Birthday-tone.m4a" type="audio/mp4">
     </audio>
 
     <!-- Background Emojis (Strictly Hidden on Screen 1) -->
@@ -335,11 +334,11 @@
         </div>
     </div>
 
-    <!-- Screen 5: Balloon Game -->
+    <!-- Screen 5: Balloon Game (No Counter Text) -->
     <div id="screen5" class="screen">
         <div class="card">
             <h2>Pop the Floating Balloons! 🎈</h2>
-            <p style="font-size: 15px; font-weight: 600; color: #ff79c6;" id="gameProgressText">Tap 5 balloons! (0/5)</p>
+            <p style="font-size: 14px; color: #e0e0e0; margin-bottom: 10px;">Tap balloons to pop them! ✨</p>
             <button id="finalBtn" class="hidden" onclick="nextScreen(6)">Next ✨</button>
         </div>
     </div>
@@ -399,13 +398,12 @@
         let balloonInterval = null;
         let elementsStarted = false;
 
-        // Emojis floating logic - Starts ONLY ONCE user clicks "Let's Start ✨"
+        // Background Emojis - Starts ONLY AFTER Screen 1 click
         function startFloatingElements() {
             if (elementsStarted) return;
             elementsStarted = true;
 
             const container = document.getElementById('flowerContainer');
-            // Un-hide explicitly after button click
             container.style.setProperty('display', 'block', 'important');
 
             const items = ['🌸', '🌺', '💖', '💗', '💓', '✨', '🎉', '🎊'];
@@ -415,7 +413,7 @@
                 el.className = 'floating-flower';
                 el.innerText = items[Math.floor(Math.random() * items.length)];
                 el.style.left = Math.random() * 90 + 'vw';
-                el.style.animationDuration = (Math.random() * 6 + 18) + 's'; // 18-24 seconds speed
+                el.style.animationDuration = (Math.random() * 6 + 18) + 's';
                 el.style.fontSize = (Math.random() * 10 + 18) + 'px';
                 
                 container.appendChild(el);
@@ -426,7 +424,6 @@
             }, 1200);
         }
 
-        // Triggered on Screen 1 Click
         function startExperience() {
             const audio = document.getElementById('bgMusic');
             if (audio) {
@@ -452,7 +449,7 @@
             btn.style.transform = `translate(${x}px, ${y}px)`;
         }
 
-        // Realistic Balloon Game Logic
+        // Balloon Game Logic (Single Touch Pop, No Counter, 5 Balloons to Proceed)
         function startBalloonGame() {
             nextScreen(5);
             poppedCount = 0;
@@ -491,11 +488,6 @@
                     wrapper.classList.add('popping');
                     poppedCount++;
                     
-                    const progressText = document.getElementById('gameProgressText');
-                    if (progressText) {
-                        progressText.innerText = `Tap 5 balloons! (${poppedCount}/5)`;
-                    }
-
                     setTimeout(() => {
                         wrapper.remove();
                     }, 200);
