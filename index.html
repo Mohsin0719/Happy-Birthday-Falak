@@ -272,9 +272,9 @@
 </head>
 <body>
 
-    <!-- Updated Direct MP3 Audio Link with Vocal Song -->
-    <audio id="bgMusic" loop preload="auto">
-        <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a77d13.mp3?filename=happy-birthday-15243.mp3" type="audio/mpeg">
+    <!-- Reliable Hosted Audio Track -->
+    <audio id="bgMusic" loop preload="auto" crossorigin="anonymous">
+        <source src="https://codeskulptor-demos.commondatastorage.googleapis.com/pang/p4.mp3" type="audio/mpeg">
     </audio>
 
     <!-- Canvas Background Layer -->
@@ -378,8 +378,15 @@
     <script>
         function playBackgroundMusic() {
             const music = document.getElementById("bgMusic");
-            music.volume = 0.6; 
-            music.play().catch(e => console.log("Audio play blocked by browser:", e));
+            music.volume = 0.7; // 70% volume
+            music.play().catch(error => {
+                console.log("Audio play blocked by browser, using safe fallback.", error);
+                // Fail-safe fallback if the browser is super aggressive
+                document.addEventListener('click', function playOnTouch() {
+                    music.play();
+                    document.removeEventListener('click', playOnTouch);
+                }, { once: true });
+            });
         }
 
         function triggerVibration() {
