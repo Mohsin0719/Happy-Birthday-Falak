@@ -272,9 +272,9 @@
 </head>
 <body>
 
-    <!-- Reliable Hosted Audio Track -->
+    <!-- Old External Audio Link with Crossorigin -->
     <audio id="bgMusic" loop preload="auto" crossorigin="anonymous">
-        <source src="https://codeskulptor-demos.commondatastorage.googleapis.com/pang/p4.mp3" type="audio/mpeg">
+        <source src="https://assets.mixkit.co/music/preview/mixkit-happy-birthday-428.mp3" type="audio/mpeg">
     </audio>
 
     <!-- Canvas Background Layer -->
@@ -376,12 +376,12 @@
     </div>
 
     <script>
+        // Old style safe audio play function
         function playBackgroundMusic() {
             const music = document.getElementById("bgMusic");
-            music.volume = 0.7; // 70% volume
+            music.volume = 0.7;
             music.play().catch(error => {
-                console.log("Audio play blocked by browser, using safe fallback.", error);
-                // Fail-safe fallback if the browser is super aggressive
+                console.log("Audio autoplay prevented", error);
                 document.addEventListener('click', function playOnTouch() {
                     music.play();
                     document.removeEventListener('click', playOnTouch);
