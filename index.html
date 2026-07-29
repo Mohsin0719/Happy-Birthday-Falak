@@ -4,297 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy Birthday Falak!</title>
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
-        
-        body { 
-            background: radial-gradient(circle at center, #1f1235, #0f081d, #05020a); 
-            color: #fff; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
-            overflow: hidden; 
-            position: relative;
-            perspective: 1000px;
-        }
-
-        /* Magic Canvas Background */
-        #magicCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1; 
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-        }
-
-        #magicCanvas.active-canvas {
-            opacity: 1;
-        }
-
-        /* Balloons Layer */
-        .balloon-stage {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 2;
-            overflow: hidden;
-            display: none;
-        }
-
-        .balloon-stage.active-stage {
-            display: block;
-            pointer-events: auto;
-        }
-
-        /* Pop-up Windows / Cards - Shifted Slightly Above Center (Top 42%) */
-        .screen { 
-            display: none; 
-            width: 90%; 
-            max-width: 420px; 
-            padding: 10px; 
-            text-align: center; 
-            z-index: 10; 
-            position: absolute;
-            top: 42%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .screen.active { 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            animation: professionalFlip 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-        }
-
-        @keyframes professionalFlip {
-            0% { 
-                opacity: 0; 
-                transform: translate(-50%, -40%) scale(0.85) rotateY(-20deg); 
-                filter: blur(10px); 
-            }
-            100% { 
-                opacity: 1; 
-                transform: translate(-50%, -50%) scale(1) rotateY(0deg); 
-                filter: blur(0); 
-            }
-        }
-
-        .card { 
-            background: rgba(255, 255, 255, 0.09); 
-            backdrop-filter: blur(30px); 
-            -webkit-backdrop-filter: blur(30px);
-            border: 1px solid rgba(255, 255, 255, 0.25); 
-            padding: 32px 24px; 
-            border-radius: 32px; 
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 35px rgba(255, 121, 198, 0.3); 
-            width: 100%; 
-            animation: cardFloat 4s infinite ease-in-out alternate;
-        }
-
-        @keyframes cardFloat {
-            0% { transform: translateY(0px); }
-            100% { transform: translateY(-8px); }
-        }
-
-        .date-badge {
-            display: inline-block;
-            background: linear-gradient(45deg, rgba(255, 121, 198, 0.25), rgba(139, 233, 253, 0.25));
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            color: #ffb86c;
-            padding: 6px 18px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            letter-spacing: 1px;
-            box-shadow: 0 0 12px rgba(255, 184, 108, 0.4);
-        }
-
-        h1 { 
-            font-family: 'Dancing Script', cursive;
-            font-size: 42px; 
-            background: linear-gradient(45deg, #ff79c6, #ffb86c, #8be9fd, #bd93f9);
-            background-size: 300% 300%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: gradientShift 4s ease infinite;
-            margin-bottom: 12px; 
-            filter: drop-shadow(0 0 10px rgba(255, 121, 198, 0.4));
-        }
-
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        h2, h3 { 
-            color: #ff79c6; 
-            margin-bottom: 12px; 
-            font-weight: 600;
-            text-shadow: 0 0 10px rgba(255, 121, 198, 0.5);
-        }
-
-        p { 
-            font-size: 15px; 
-            color: #f1f1f1; 
-            margin-bottom: 20px; 
-            line-height: 1.6;
-        }
-
-        .msg-text {
-            font-size: 14px;
-            font-style: italic;
-            text-align: center;
-            line-height: 1.8;
-            margin-bottom: 20px;
-        }
-
-        .msg-text span {
-            display: block;
-            margin-bottom: 6px;
-        }
-
-        .from-tag {
-            font-size: 17px;
-            font-weight: 600;
-            color: #8be9fd;
-            text-shadow: 0 0 12px rgba(139, 233, 253, 0.8);
-            margin-top: 10px;
-            margin-bottom: 15px;
-            font-style: italic;
-        }
-
-        button { 
-            background: linear-gradient(45deg, #ff416c, #ff4b2b); 
-            border: none; 
-            color: #fff; 
-            padding: 13px 30px; 
-            font-size: 15px; 
-            font-weight: 600;
-            border-radius: 30px; 
-            cursor: pointer; 
-            box-shadow: 0 5px 25px rgba(255, 65, 108, 0.6); 
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 30px rgba(255, 65, 108, 0.8);
-        }
-
-        button:active { 
-            transform: scale(0.95); 
-        }
-
-        .btn-group { 
-            display: flex; 
-            justify-content: center; 
-            gap: 15px; 
-            position: relative; 
-        }
-
-        .no-btn { 
-            background: rgba(255, 255, 255, 0.2); 
-            box-shadow: none;
-        }
-
-        .cake { 
-            font-size: 75px; 
-            margin: 8px 0; 
-            display: inline-block;
-            animation: pulseGlow 2s infinite ease-in-out;
-        }
-
-        @keyframes pulseGlow {
-            0% { transform: scale(1); filter: drop-shadow(0 0 5px #ff79c6); }
-            50% { transform: scale(1.08); filter: drop-shadow(0 0 25px #ff79c6); }
-            100% { transform: scale(1); filter: drop-shadow(0 0 5px #ff79c6); }
-        }
-
-        .floating-balloon { 
-            position: absolute;
-            bottom: -150px;
-            width: 65px; 
-            height: 80px; 
-            border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%; 
-            cursor: pointer; 
-            box-shadow: inset -7px -7px 15px rgba(0,0,0,0.3), inset 5px 5px 10px rgba(255,255,255,0.4);
-            animation: riseUp 6.5s linear infinite;
-        }
-
-        .floating-balloon::before {
-            content: '';
-            position: absolute;
-            bottom: -6px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 10px;
-            height: 6px;
-            background: inherit;
-            border-radius: 3px;
-        }
-
-        .balloon-string {
-            position: absolute;
-            top: 80px;
-            left: 50%;
-            width: 2px;
-            height: 60px;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(255,255,255,0.1));
-            transform-origin: top center;
-            animation: stringWiggle 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes stringWiggle {
-            0% { transform: rotate(-5deg); }
-            100% { transform: rotate(5deg); }
-        }
-
-        @keyframes riseUp {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-115vh) rotate(15deg); opacity: 0.8; }
-        }
-
-        .hidden { display: none !important; }
-    </style>
+    <!-- Style CSS Link -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Old External Audio Link with Crossorigin -->
-    <audio id="bgMusic" loop preload="auto" crossorigin="anonymous">
-        <source src="https://assets.mixkit.co/music/preview/mixkit-happy-birthday-428.mp3" type="audio/mpeg">
+    <!-- Audio Track from GitHub Folder -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="birthday-tone.m4a" type="audio/mp4">
     </audio>
 
-    <!-- Canvas Background Layer -->
+    <!-- Animated Magic Canvas Background -->
     <canvas id="magicCanvas"></canvas>
 
-    <!-- Balloons Layer -->
+    <!-- Floating Interactive Balloons Stage -->
     <div id="balloonStage" class="balloon-stage"></div>
 
-    <!-- Screen 1: Let's Start -->
+    <!-- Screen 1: Initial Entry -->
     <div id="screen1" class="screen active">
         <div class="card">
             <div class="date-badge">📅 03 August 2026</div>
             <span class="cake">✨</span>
             <h1>Something Special</h1>
-            <p>Are you ready for this? ✨ Open the magic...</p>
+            <p>I crafted a small magical experience for you... ✨ Open it up!</p>
             <button onclick="startExperience()">Let's Start ✨</button>
         </div>
     </div>
 
-    <!-- Screen 2: Special Day -->
+    <!-- Screen 2: Warm Welcome -->
     <div id="screen2" class="screen">
         <div class="card">
             <span class="cake">🎂</span>
@@ -304,7 +43,7 @@
         </div>
     </div>
 
-    <!-- Screen 3: Question -->
+    <!-- Screen 3: Interactive Choice Screen -->
     <div id="screen3" class="screen">
         <div class="card">
             <h3>Have a look at it,</h3>
@@ -317,28 +56,28 @@
         </div>
     </div>
 
-    <!-- Screen 4: Cake & Age -->
+    <!-- Screen 4: Cake Cutting & Age Milestone -->
     <div id="screen4" class="screen">
         <div class="card">
             <div class="date-badge">🎈 03 August 2026 🎈</div>
             <h1>Happy Birthday Falak! 🎉</h1>
             <div class="cake">🎂</div>
             <p style="margin-bottom: 8px;">YOU ARE NOW <strong style="color: #ff79c6; font-size: 26px; text-shadow: 0 0 10px #ff79c6;">19</strong> Years Young! 🌸</p>
-            <div class="from-tag">~ From Mohsin ✨💖</div>
+            <div class="from-tag">From Mohsin ✨💖</div>
             <button onclick="startBalloonGame()">Cut The Cake 🎂</button>
         </div>
     </div>
 
-    <!-- Screen 5: Balloon Game -->
+    <!-- Screen 5: Mini Balloon Pop Game -->
     <div id="screen5" class="screen">
         <div class="card">
             <h2>Pop the Floating Balloons! 🎈</h2>
-            <p style="font-size: 14px;">Tap balloons as they fly up!</p>
+            <p style="font-size: 14px;">Tap 5 balloons as they fly up to proceed!</p>
             <button id="finalBtn" class="hidden" onclick="nextScreen(6)">Next ✨</button>
         </div>
     </div>
 
-    <!-- Screen 6: Special Message -->
+    <!-- Screen 6: Heartfelt Wishes Message -->
     <div id="screen6" class="screen">
         <div class="card">
             <h3>💌 A Special Message for you! ✨</h3>
@@ -353,152 +92,41 @@
         </div>
     </div>
 
-    <!-- Screen 7: 19 & Shining -->
+    <!-- Screen 7: Personal Note Screen (Header Label Removed) -->
     <div id="screen7" class="screen">
+        <div class="card">
+            <div class="date-badge">✨ 03 August 2026 ✨</div>
+            <p style="font-size: 16px; line-height: 1.7; color: #f1f1f1; font-style: italic; margin-top: 10px;">
+                I hope this year brings you as much happiness, warmth, and peace as you bring into the lives of people around you. Keep glowing and shining always!
+            </p>
+            <div class="from-tag" style="margin-top: 15px;">From Mohsin ✨💖</div>
+            <button style="margin-top: 15px;" onclick="nextScreen(8)">Next ✨</button>
+        </div>
+    </div>
+
+    <!-- Screen 8: Final Showcase & Birthday Wish -->
+    <div id="screen8" class="screen">
         <div class="card">
             <div class="date-badge">✨ 03 August 2026 ✨</div>
             <h1>Falak</h1>
             <p style="font-size: 20px; color: #ff79c6; font-weight: 600;">✨ 19 & Shining ✨</p>
             <p>You're the best! Wishing you an epic amazing year ahead🥰 🎉🎉👏🥳! ❤️</p>
-            <button onclick="nextScreen(8)">Next</button>
+            <button onclick="nextScreen(9)">Next ✨</button>
         </div>
     </div>
 
-    <!-- Screen 8: Final Text Message -->
-    <div id="screen8" class="screen">
+    <!-- Screen 9: Closing Screen & Final Wish -->
+    <div id="screen9" class="screen">
         <div class="card">
             <p style="font-size: 18px; font-weight: 500; line-height: 1.6; text-shadow: 0 0 10px rgba(255, 121, 198, 0.4); margin-bottom: 15px; margin-top: 10px;">
                 Created just for you to make your day extra special! ❤️✨
             </p>
-            <div class="from-tag">~ From Mohsin ✨💖</div>
+            <div class="from-tag">From Mohsin ✨💖</div>
             <button style="margin-top: 10px;" onclick="finishCelebration()">Make a Wish ✨</button>
         </div>
     </div>
 
-    <script>
-        // Old style safe audio play function
-        function playBackgroundMusic() {
-            const music = document.getElementById("bgMusic");
-            music.volume = 0.7;
-            music.play().catch(error => {
-                console.log("Audio autoplay prevented", error);
-                document.addEventListener('click', function playOnTouch() {
-                    music.play();
-                    document.removeEventListener('click', playOnTouch);
-                }, { once: true });
-            });
-        }
-
-        function triggerVibration() {
-            if ("vibrate" in navigator) {
-                try { navigator.vibrate(40); } catch(e) {}
-            }
-        }
-
-        function startExperience() {
-            playBackgroundMusic();
-            document.getElementById("magicCanvas").classList.add("active-canvas");
-            nextScreen(2);
-        }
-
-        function nextScreen(s) {
-            triggerVibration();
-            document.querySelectorAll('.screen').forEach(sc => sc.classList.remove('active'));
-            document.getElementById('balloonStage').classList.remove('active-stage');
-            document.getElementById('screen' + s).classList.add('active');
-        }
-
-        function moveBtn() {
-            triggerVibration();
-            let b = document.getElementById("noBtn");
-            b.style.position = "fixed";
-            b.style.left = Math.random() * (window.innerWidth - 80) + "px";
-            b.style.top = Math.random() * (window.innerHeight - 40) + "px";
-        }
-
-        let popped = 0;
-        function startBalloonGame() {
-            triggerVibration();
-            nextScreen(5);
-            const stage = document.getElementById('balloonStage');
-            stage.innerHTML = '';
-            stage.classList.add('active-stage');
-            popped = 0;
-
-            const colors = ['#ff4b2b', '#ff79c6', '#8be9fd', '#bd93f9', '#f1fa8c', '#ff922b'];
-
-            for (let i = 0; i < 15; i++) {
-                let b = document.createElement("div");
-                b.className = "floating-balloon";
-                b.style.backgroundColor = colors[i % colors.length];
-                b.style.left = Math.random() * 85 + 5 + "vw";
-                b.style.animationDelay = (Math.random() * 4) + "s";
-                b.style.animationDuration = (Math.random() * 3 + 4.5) + "s";
-
-                let string = document.createElement("div");
-                string.className = "balloon-string";
-                b.appendChild(string);
-
-                b.onclick = function () {
-                    triggerVibration();
-                    this.style.transform = "scale(1.4)";
-                    this.style.opacity = "0";
-                    setTimeout(() => this.remove(), 200);
-                    popped++;
-                    if (popped >= 5) {
-                        document.getElementById("finalBtn").classList.remove("hidden");
-                    }
-                };
-                stage.appendChild(b);
-            }
-        }
-
-        function finishCelebration() {
-            triggerVibration();
-            alert('Hope this brought the biggest smile to your face, Falak! ✨💖');
-        }
-
-        // Canvas Background Animation
-        const canvas = document.getElementById("magicCanvas");
-        const ctx = canvas.getContext("2d");
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        const particles = [];
-        const symbols = ['🌸', '✨', '💖', '⭐', '🌹', '🎉'];
-
-        for (let i = 0; i < 22; i++) { 
-            particles.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                size: Math.random() * 14 + 10,
-                speedY: Math.random() * 0.8 + 0.3,
-                speedX: Math.random() * 0.5 - 0.25,
-                symbol: symbols[Math.floor(Math.random() * symbols.length)]
-            });
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                ctx.font = `${p.size}px serif`;
-                ctx.fillText(p.symbol, p.x, p.y);
-                p.y += p.speedY;
-                p.x += p.speedX;
-
-                if (p.y > canvas.height) {
-                    p.y = -20;
-                    p.x = Math.random() * canvas.width;
-                }
-            });
-            requestAnimationFrame(animate);
-        }
-        animate();
-
-        window.addEventListener("resize", () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-    </script>
+    <!-- Script JS Link -->
+    <script src="script.js"></script>
 </body>
 </html>
