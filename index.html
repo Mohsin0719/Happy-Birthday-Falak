@@ -17,7 +17,7 @@
         }
 
         body, html {
-            background-color: #0d0d1a;
+            background: linear-gradient(135deg, #0d0d1a 0%, #1a0033 100%);
             color: #ffffff;
             width: 100vw;
             height: 100vh;
@@ -25,7 +25,28 @@
             position: relative;
         }
 
-        /* 1. BACKGROUND FLOATING EMOJIS (Disabled on Screen 1) */
+        /* Audio Toggle Button */
+        #audioToggleBtn {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 100005;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border-radius: 50%;
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        /* 1. BACKGROUND FLOATING EMOJIS */
         #flowerContainer {
             position: fixed;
             top: 0;
@@ -90,7 +111,7 @@
         }
 
         .card {
-            background: rgba(20, 20, 35, 0.85);
+            background: linear-gradient(145deg, rgba(30, 20, 50, 0.9), rgba(15, 15, 30, 0.95));
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.18);
@@ -205,7 +226,18 @@
             display: none !important;
         }
 
-        /* 4. REALISTIC BALLOONS WITH LARGE TOUCH HIT-AREA */
+        /* Wish Success Message */
+        #wishSuccessMsg {
+            display: none;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #ff79c6;
+            font-weight: 600;
+            animation: fadeIn 0.5s ease-out forwards;
+            text-shadow: 0 0 10px rgba(255, 121, 198, 0.6);
+        }
+
+        /* 4. SIMPLE SMOOTH BALLOONS */
         .balloon-wrapper {
             position: absolute;
             width: 90px;
@@ -224,7 +256,8 @@
         .balloon-wrapper.popping {
             animation: none !important;
             opacity: 0;
-            transition: opacity 0.1s ease-out;
+            transform: scale(0.8);
+            transition: opacity 0.15s ease-out;
             pointer-events: none !important;
         }
 
@@ -278,9 +311,12 @@
 <body>
 
     <!-- Audio Element -->
-    <audio id="bgMusic" loop preload="auto">
+    <audio id="bgMusic" loop playsinline preload="auto">
         <source src="Birthday-tone.m4a" type="audio/mp4">
     </audio>
+
+    <!-- Audio Control Button -->
+    <div id="audioToggleBtn" onclick="toggleAudio()">🎵</div>
 
     <!-- Background Emojis Container -->
     <div id="flowerContainer"></div>
@@ -349,10 +385,10 @@
             <h3>💌 A Special Message for you! ✨</h3>
             <div class="msg-text">
                 <span>Dear Falak,</span>
-                <span>Happy Birthday to you🤌🏻🌚! On your special day✨🎀,</span>
-                <span>🎊Wishing you a year full of happiness, success & Allah's blessings.🌕💫🌸</span>
-                <span>🎀May your life be filled with joy, health, and peace🧸.</span>
-                <span>✨May all your dreams come true.✨💖</span>
+                <span>Happy Birthday to you! On your special day,</span>
+                <span>Wishing you a year full of happiness, success & Allah's blessings.</span>
+                <span>May your life be filled with joy, health, and peace.</span>
+                <span>May all your dreams come true. ✨💖</span>
             </div>
             <button onclick="nextScreen(7)">Next ✨</button>
         </div>
@@ -376,7 +412,7 @@
             <div class="date-badge">✨ 03 August 2026 ✨</div>
             <h1>Falak</h1>
             <p style="font-size: 20px; color: #ff79c6; font-weight: 600;">✨ 19 & Shining ✨</p>
-            <p>You're the best! Wishing you an epic amazing year ahead🥰 🎉🎉👏🥳! ❤️</p>
+            <p>You're the best! Wishing you an epic amazing year ahead! ❤️</p>
             <button onclick="nextScreen(9)">Next ✨</button>
         </div>
     </div>
@@ -388,7 +424,8 @@
                 Created just for you to make your day extra special! ❤️✨
             </p>
             <div class="from-tag">From Mohsin ✨💖</div>
-            <button style="margin-top: 10px;" onclick="finishCelebration()">Make a Wish ✨</button>
+            <button id="wishBtn" style="margin-top: 10px;" onclick="finishCelebration()">Make a Wish ✨</button>
+            <div id="wishSuccessMsg">✨ Your wish has been sent into the stars! 🌟</div>
         </div>
     </div>
 
@@ -397,6 +434,37 @@
         let poppedCount = 0;
         let balloonInterval = null;
         let elementsStarted = false;
+        const audio = document.getElementById('bgMusic');
+
+        function playMusic() {
+            if (audio) {
+                audio.play().then(() => {
+                    document.getElementById('audioToggleBtn').innerText = '🎵';
+                }).catch(err => {
+                    console.log("Autoplay blocked: ", err);
+                    document.getElementById('audioToggleBtn').innerText = '🔇';
+                });
+            }
+        }
+
+        function toggleAudio() {
+            if (!audio) return;
+            const btn = document.getElementById('audioToggleBtn');
+            if (audio.paused) {
+                playMusic();
+            } else {
+                audio.pause();
+                btn.innerText = '🔇';
+            }
+        }
+
+        function stopAudio() {
+            if (audio) {
+                audio.pause();
+                audio.currentTime = 0;
+                document.getElementById('audioToggleBtn').innerText = '🔇';
+            }
+        }
 
         function startFloatingElements() {
             if (elementsStarted) return;
@@ -424,10 +492,7 @@
         }
 
         function startExperience() {
-            const audio = document.getElementById('bgMusic');
-            if (audio) {
-                audio.play().catch(e => console.log("Audio Play Error:", e));
-            }
+            playMusic();
             startFloatingElements();
             nextScreen(2);
         }
@@ -484,7 +549,7 @@
 
                     setTimeout(() => {
                         if (wrapper.parentNode) wrapper.remove();
-                    }, 100);
+                    }, 150);
 
                     if (poppedCount >= 5) {
                         clearInterval(balloonInterval);
@@ -511,7 +576,9 @@
         }
 
         function finishCelebration() {
-            alert("✨ Your wish has been sent into the stars! Happy Birthday Falak! 🎉💖");
+            stopAudio();
+            document.getElementById('wishBtn').style.display = 'none';
+            document.getElementById('wishSuccessMsg').style.display = 'block';
         }
     </script>
 </body>
