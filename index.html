@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy Birthday Falak!</title>
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <style>
         * {
@@ -18,19 +18,18 @@
         body, html {
             background-color: #0d0d1a;
             color: #ffffff;
-            height: 100%;
             width: 100%;
+            height: 100%;
             overflow: hidden;
-            margin: 0;
-            padding: 0;
+            position: relative;
         }
 
         #magicCanvas {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             z-index: 1;
             pointer-events: none;
         }
@@ -39,13 +38,13 @@
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
+            width: 100vw;
+            height: 100vh;
             z-index: 2;
+            pointer-events: auto;
         }
 
-        /* 100% Guaranteed Perfect Centering Layout */
+        /* Perfectly Centered Screens with Flexbox */
         .screen {
             display: none;
             position: fixed;
@@ -56,12 +55,12 @@
             z-index: 10;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 15px;
         }
 
         .screen.active {
-            display: flex;
-            animation: fadeIn 0.5s ease-in-out forwards;
+            display: flex !important;
+            animation: fadeIn 0.4s ease-out forwards;
         }
 
         .card {
@@ -70,7 +69,7 @@
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 24px;
-            padding: 30px 24px;
+            padding: 28px 20px;
             width: 100%;
             max-width: 380px;
             text-align: center;
@@ -79,13 +78,14 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            margin: auto;
         }
 
         h1 {
-            font-size: 26px;
+            font-size: 24px;
             font-weight: 700;
             color: #ff79c6;
-            margin: 12px 0;
+            margin: 10px 0;
             text-shadow: 0 0 12px rgba(255, 121, 198, 0.5);
         }
 
@@ -103,7 +103,7 @@
         p {
             font-size: 14px;
             color: #e0e0e0;
-            margin-bottom: 18px;
+            margin-bottom: 16px;
             line-height: 1.5;
         }
 
@@ -119,8 +119,8 @@
         }
 
         .cake {
-            font-size: 48px;
-            margin: 10px 0;
+            font-size: 45px;
+            margin: 8px 0;
             display: inline-block;
         }
 
@@ -128,7 +128,7 @@
             font-size: 14px;
             font-weight: 600;
             color: #ff79c6;
-            margin: 8px 0 16px 0;
+            margin: 8px 0 14px 0;
             font-style: italic;
         }
 
@@ -142,7 +142,7 @@
             border-radius: 30px;
             cursor: pointer;
             box-shadow: 0 5px 15px rgba(255, 121, 198, 0.4);
-            transition: all 0.3s ease;
+            transition: transform 0.2s ease, background 0.3s ease;
         }
 
         button:active {
@@ -162,7 +162,7 @@
             background: rgba(255, 255, 255, 0.2);
             box-shadow: none;
             position: relative;
-            transition: all 0.2s ease;
+            transition: transform 0.2s ease;
         }
 
         .msg-text span {
@@ -177,40 +177,52 @@
             display: none !important;
         }
 
+        /* Floating Balloon Animation & Ribbon */
         .pop-balloon {
             position: absolute;
-            width: 45px;
-            height: 55px;
+            width: 50px;
+            height: 62px;
             background: #ff79c6;
             border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
             cursor: pointer;
             z-index: 100;
             pointer-events: auto;
-            animation: floatUp 4s linear forwards;
+            animation: floatUp 4.5s linear forwards;
+            box-shadow: inset -5px -5px 10px rgba(0,0,0,0.15);
+        }
+
+        .pop-balloon::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 23px;
+            width: 2px;
+            height: 14px;
+            background: rgba(255, 255, 255, 0.7);
         }
 
         @keyframes floatUp {
-            0% { bottom: -60px; opacity: 1; }
+            0% { bottom: -80px; opacity: 1; }
             100% { bottom: 105vh; opacity: 0.8; }
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
+            from { opacity: 0; transform: scale(0.96); }
             to { opacity: 1; transform: scale(1); }
         }
     </style>
 </head>
 <body>
 
-    <!-- Audio Track -->
+    <!-- Audio Element -->
     <audio id="bgMusic" loop preload="auto">
         <source src="birthday-tone.m4a" type="audio/mp4">
     </audio>
 
-    <!-- Canvas Background -->
+    <!-- Particles Background -->
     <canvas id="magicCanvas"></canvas>
 
-    <!-- Balloon Stage -->
+    <!-- Balloon Game Container -->
     <div id="balloonStage" class="balloon-stage"></div>
 
     <!-- Screen 1 -->
@@ -238,7 +250,7 @@
     <div id="screen3" class="screen">
         <div class="card">
             <h3>Have a look at it,</h3>
-            <h2 style="font-size: 34px;">Falak</h2>
+            <h2 style="font-size: 34px; margin: 5px 0;">Falak</h2>
             <p>Don't you dare say no! 🤫</p>
             <div class="btn-group">
                 <button onclick="nextScreen(4)">Yes! 💖</button>
@@ -263,7 +275,7 @@
     <div id="screen5" class="screen">
         <div class="card">
             <h2>Pop the Floating Balloons! 🎈</h2>
-            <p style="font-size: 14px;">Tap 5 balloons as they fly up to proceed!</p>
+            <p style="font-size: 14px;" id="gameProgressText">Tap 5 balloons to proceed! (0/5)</p>
             <button id="finalBtn" class="hidden" onclick="nextScreen(6)">Next ✨</button>
         </div>
     </div>
@@ -287,11 +299,11 @@
     <div id="screen7" class="screen">
         <div class="card">
             <div class="date-badge">✨ 03 August 2026 ✨</div>
-            <p style="font-size: 16px; line-height: 1.7; color: #f1f1f1; font-style: italic; margin-top: 10px;">
+            <p style="font-size: 15px; line-height: 1.7; color: #f1f1f1; font-style: italic; margin-top: 10px;">
                 I hope this year brings you as much happiness, warmth, and peace as you bring into the lives of people around you. Keep glowing and shining always!
             </p>
             <div class="from-tag" style="margin-top: 15px;">From Mohsin ✨💖</div>
-            <button style="margin-top: 15px;" onclick="nextScreen(8)">Next ✨</button>
+            <button style="margin-top: 10px;" onclick="nextScreen(8)">Next ✨</button>
         </div>
     </div>
 
@@ -317,10 +329,12 @@
         </div>
     </div>
 
-    <!-- Embedded JavaScript -->
+    <!-- JavaScript Execution -->
     <script>
         let poppedCount = 0;
+        let balloonInterval = null;
 
+        // Background Particles
         const canvas = document.getElementById('magicCanvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
@@ -332,16 +346,15 @@
             constructor() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 3 + 1;
-                this.speedX = Math.random() * 1 - 0.5;
-                this.speedY = Math.random() * 1 - 0.5;
+                this.size = Math.random() * 2.5 + 1;
+                this.speedX = Math.random() * 0.8 - 0.4;
+                this.speedY = Math.random() * 0.8 - 0.4;
                 this.color = `hsl(${Math.random() * 60 + 300}, 100%, 75%)`;
             }
 
             update() {
                 this.x += this.speedX;
                 this.y += this.speedY;
-
                 if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
                 if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
             }
@@ -356,7 +369,7 @@
 
         function initParticles() {
             particles = [];
-            for (let i = 0; i < 60; i++) {
+            for (let i = 0; i < 50; i++) {
                 particles.push(new Particle());
             }
         }
@@ -373,10 +386,15 @@
         initParticles();
         animateParticles();
 
+        // Screen & Audio Trigger
         function startExperience() {
             const audio = document.getElementById('bgMusic');
             if (audio) {
-                audio.play().catch(e => console.log("Audio play issue: ", e));
+                audio.play().then(() => {
+                    console.log("Audio playing successfully");
+                }).catch(e => {
+                    console.log("Audio trigger info: ", e);
+                });
             }
             nextScreen(2);
         }
@@ -391,41 +409,54 @@
 
         function moveBtn() {
             const btn = document.getElementById('noBtn');
-            const x = Math.random() * 160 - 80;
-            const y = Math.random() * 160 - 80;
+            const x = Math.random() * 140 - 70;
+            const y = Math.random() * 140 - 70;
             btn.style.transform = `translate(${x}px, ${y}px)`;
         }
 
+        // Balloon Pop Game Logic
         function startBalloonGame() {
             nextScreen(5);
+            poppedCount = 0;
             const stage = document.getElementById('balloonStage');
+            stage.innerHTML = ''; // Clear previous elements
             
-            let interval = setInterval(() => {
+            if (balloonInterval) clearInterval(balloonInterval);
+
+            balloonInterval = setInterval(() => {
                 if (poppedCount >= 5) {
-                    clearInterval(interval);
+                    clearInterval(balloonInterval);
                     return;
                 }
 
                 const balloon = document.createElement('div');
                 balloon.className = 'pop-balloon';
                 balloon.style.left = Math.random() * (window.innerWidth - 60) + 'px';
-                balloon.style.backgroundColor = `hsl(${Math.random() * 360}, 80%, 65%)`;
+                balloon.style.backgroundColor = `hsl(${Math.random() * 360}, 85%, 65%)`;
 
-                balloon.onclick = function() {
+                balloon.addEventListener('click', function popHandler() {
                     poppedCount++;
-                    this.remove();
-                    if (poppedCount >= 5) {
-                        document.getElementById('finalBtn').classList.remove('hidden');
+                    const progressText = document.getElementById('gameProgressText');
+                    if (progressText) {
+                        progressText.innerText = `Tap 5 balloons to proceed! (${poppedCount}/5)`;
                     }
-                };
+
+                    this.remove();
+
+                    if (poppedCount >= 5) {
+                        clearInterval(balloonInterval);
+                        const nextBtn = document.getElementById('finalBtn');
+                        if (nextBtn) nextBtn.classList.remove('hidden');
+                    }
+                });
 
                 stage.appendChild(balloon);
 
                 setTimeout(() => {
                     if (balloon.parentNode) balloon.remove();
-                }, 4000);
+                }, 4500);
 
-            }, 800);
+            }, 700);
         }
 
         function finishCelebration() {
