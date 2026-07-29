@@ -25,7 +25,7 @@
             position: relative;
         }
 
-        /* 1. BACKGROUND FLOATING EMOJIS (Strictly Disabled on Screen 1) */
+        /* 1. BACKGROUND FLOATING EMOJIS (Disabled on Screen 1) */
         #flowerContainer {
             position: fixed;
             top: 0;
@@ -58,7 +58,7 @@
             }
         }
 
-        /* 2. BALLOON STAGE LAYER (High Z-Index so balloons are ALWAYS clickable) */
+        /* 2. BALLOON STAGE LAYER */
         .balloon-stage {
             position: fixed;
             top: 0;
@@ -205,27 +205,27 @@
             display: none !important;
         }
 
-        /* 4. REALISTIC BALLOONS (Highest priority clicks) */
+        /* 4. REALISTIC BALLOONS WITH LARGE TOUCH HIT-AREA */
         .balloon-wrapper {
             position: absolute;
-            width: 70px;
-            height: 115px;
+            width: 90px;
+            height: 130px;
             cursor: pointer;
-            z-index: 99999 !important; /* Forces balloon on top of card */
+            z-index: 99999 !important;
             pointer-events: auto !important;
-            animation: floatUpBalloon 6.5s cubic-bezier(0.4, 0, 0.6, 1) forwards;
-            touch-action: manipulation;
+            animation: floatUpBalloon 6.5s linear forwards;
+            touch-action: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
         }
 
         .balloon-wrapper.popping {
-            animation: popExplode 0.15s ease-out forwards !important;
+            animation: none !important;
+            opacity: 0;
+            transition: opacity 0.1s ease-out;
             pointer-events: none !important;
-        }
-
-        @keyframes popExplode {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.4); opacity: 0.8; filter: brightness(2); }
-            100% { transform: scale(0); opacity: 0; }
         }
 
         .balloon-body {
@@ -233,8 +233,7 @@
             height: 70px;
             border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
             position: relative;
-            margin: 0 auto;
-            pointer-events: auto;
+            pointer-events: none;
         }
 
         .balloon-knot {
@@ -266,8 +265,8 @@
         }
 
         @keyframes floatUpBalloon {
-            0% { bottom: -120px; opacity: 1; }
-            100% { bottom: 108vh; opacity: 0.95; }
+            0% { bottom: -130px; }
+            100% { bottom: 108vh; }
         }
 
         @keyframes fadeIn {
@@ -399,7 +398,6 @@
         let balloonInterval = null;
         let elementsStarted = false;
 
-        // Emojis floating logic
         function startFloatingElements() {
             if (elementsStarted) return;
             elementsStarted = true;
@@ -425,7 +423,6 @@
             }, 1200);
         }
 
-        // Direct audio start on Screen 1 Button
         function startExperience() {
             const audio = document.getElementById('bgMusic');
             if (audio) {
@@ -450,7 +447,6 @@
             btn.style.transform = `translate(${x}px, ${y}px)`;
         }
 
-        // Balloon Game Logic
         function startBalloonGame() {
             nextScreen(5);
             poppedCount = 0;
@@ -467,7 +463,7 @@
 
                 const wrapper = document.createElement('div');
                 wrapper.className = 'balloon-wrapper';
-                wrapper.style.left = Math.random() * (window.innerWidth - 80) + 'px';
+                wrapper.style.left = Math.random() * (window.innerWidth - 90) + 'px';
 
                 const hue = Math.floor(Math.random() * 360);
                 
@@ -480,13 +476,7 @@
                     </svg>
                 `;
 
-                // Single touch pop handler
-                const popMe = function(e) {
-                    if (e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                    }
-
+                const handlePop = function(e) {
                     if (wrapper.classList.contains('popping')) return;
                     
                     wrapper.classList.add('popping');
@@ -494,7 +484,7 @@
 
                     setTimeout(() => {
                         if (wrapper.parentNode) wrapper.remove();
-                    }, 150);
+                    }, 100);
 
                     if (poppedCount >= 5) {
                         clearInterval(balloonInterval);
@@ -505,10 +495,9 @@
                     }
                 };
 
-                // Multiple touch listeners to ensure immediate pop on mobile devices
-                wrapper.addEventListener('touchstart', popMe, { passive: false });
-                wrapper.addEventListener('pointerdown', popMe);
-                wrapper.addEventListener('click', popMe);
+                wrapper.onpointerdown = handlePop;
+                wrapper.ontouchstart = handlePop;
+                wrapper.onclick = handlePop;
 
                 stage.appendChild(wrapper);
 
