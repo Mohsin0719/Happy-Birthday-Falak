@@ -58,14 +58,14 @@
             }
         }
 
-        /* 2. BALLOON STAGE LAYER */
+        /* 2. BALLOON STAGE LAYER (High Z-Index so balloons are ALWAYS clickable) */
         .balloon-stage {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: 5;
+            z-index: 9999;
             pointer-events: none;
         }
 
@@ -105,7 +105,7 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            z-index: 1000;
+            z-index: 500;
         }
 
         h1 {
@@ -171,7 +171,7 @@
             box-shadow: 0 5px 15px rgba(255, 121, 198, 0.4);
             transition: transform 0.1s ease;
             position: relative;
-            z-index: 1100;
+            z-index: 600;
             pointer-events: auto !important;
         }
 
@@ -205,35 +205,36 @@
             display: none !important;
         }
 
-        /* 4. REALISTIC BALLOONS (Natural Shape + Knot + Wavy Ribbon) */
+        /* 4. REALISTIC BALLOONS (Highest priority clicks) */
         .balloon-wrapper {
             position: absolute;
-            width: 65px;
-            height: 110px;
+            width: 70px;
+            height: 115px;
             cursor: pointer;
-            z-index: 10;
-            pointer-events: auto;
+            z-index: 99999 !important; /* Forces balloon on top of card */
+            pointer-events: auto !important;
             animation: floatUpBalloon 6.5s cubic-bezier(0.4, 0, 0.6, 1) forwards;
             touch-action: manipulation;
         }
 
         .balloon-wrapper.popping {
-            animation: popExplode 0.2s ease-out forwards !important;
-            pointer-events: none;
+            animation: popExplode 0.15s ease-out forwards !important;
+            pointer-events: none !important;
         }
 
         @keyframes popExplode {
             0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.35); opacity: 0.8; filter: brightness(1.8); }
+            50% { transform: scale(1.4); opacity: 0.8; filter: brightness(2); }
             100% { transform: scale(0); opacity: 0; }
         }
 
         .balloon-body {
-            width: 56px;
-            height: 68px;
+            width: 58px;
+            height: 70px;
             border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
             position: relative;
             margin: 0 auto;
+            pointer-events: auto;
         }
 
         .balloon-knot {
@@ -250,7 +251,7 @@
 
         .balloon-string-svg {
             position: absolute;
-            top: 71px;
+            top: 73px;
             left: 50%;
             transform: translateX(-50%);
             width: 20px;
@@ -278,17 +279,17 @@
 <body>
 
     <!-- Audio Element -->
-    <audio id="bgMusic" loop playsinline preload="auto">
-        <source src="Birthday-tone.m4a" type="audio/mp4">
+    <audio id="bgMusic" loop preload="auto">
+        <source src="birthday-tone.m4a" type="audio/mp4">
     </audio>
 
-    <!-- Background Emojis (Strictly Hidden on Screen 1) -->
+    <!-- Background Emojis Container -->
     <div id="flowerContainer"></div>
 
-    <!-- Balloon Game Stage Layer -->
+    <!-- Balloon Game Layer -->
     <div id="balloonStage" class="balloon-stage"></div>
 
-    <!-- Screen 1 (100% Clean) -->
+    <!-- Screen 1 (Clean) -->
     <div id="screen1" class="screen active">
         <div class="card">
             <div class="date-badge">📅 03 August 2026</div>
@@ -334,7 +335,7 @@
         </div>
     </div>
 
-    <!-- Screen 5: Balloon Game (No Counter Text) -->
+    <!-- Screen 5: Balloon Game -->
     <div id="screen5" class="screen">
         <div class="card">
             <h2>Pop the Floating Balloons! 🎈</h2>
@@ -398,7 +399,7 @@
         let balloonInterval = null;
         let elementsStarted = false;
 
-        // Background Emojis - Starts ONLY AFTER Screen 1 click
+        // Emojis floating logic
         function startFloatingElements() {
             if (elementsStarted) return;
             elementsStarted = true;
@@ -424,21 +425,12 @@
             }, 1200);
         }
 
-        // Guaranteed Audio Trigger on User Click
+        // Direct audio start on Screen 1 Button
         function startExperience() {
             const audio = document.getElementById('bgMusic');
             if (audio) {
-                audio.currentTime = 0;
-                let playPromise = audio.play();
-                if (playPromise !== undefined) {
-                    playPromise.then(() => {
-                        console.log("Audio playing successfully!");
-                    }).catch(error => {
-                        console.log("Audio autoplay error: ", error);
-                    });
-                }
+                audio.play().catch(e => console.log("Audio Play Error:", e));
             }
-            
             startFloatingElements();
             nextScreen(2);
         }
@@ -488,18 +480,21 @@
                     </svg>
                 `;
 
+                // Single touch pop handler
                 const popMe = function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
+                    if (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
 
                     if (wrapper.classList.contains('popping')) return;
                     
                     wrapper.classList.add('popping');
                     poppedCount++;
-                    
+
                     setTimeout(() => {
-                        wrapper.remove();
-                    }, 200);
+                        if (wrapper.parentNode) wrapper.remove();
+                    }, 150);
 
                     if (poppedCount >= 5) {
                         clearInterval(balloonInterval);
@@ -510,6 +505,8 @@
                     }
                 };
 
+                // Multiple touch listeners to ensure immediate pop on mobile devices
+                wrapper.addEventListener('touchstart', popMe, { passive: false });
                 wrapper.addEventListener('pointerdown', popMe);
                 wrapper.addEventListener('click', popMe);
 
