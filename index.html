@@ -13,6 +13,7 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body, html {
@@ -24,7 +25,7 @@
             position: relative;
         }
 
-        /* Floating Flowers Background Container (Top to Bottom) */
+        /* Floating Elements Container (Top to Bottom) */
         #flowerContainer {
             position: fixed;
             top: 0;
@@ -32,7 +33,7 @@
             width: 100vw;
             height: 100vh;
             z-index: 1;
-            pointer-events: none; /* Allows clicks to pass through to buttons */
+            pointer-events: none;
             overflow: hidden;
         }
 
@@ -40,19 +41,18 @@
             position: absolute;
             user-select: none;
             pointer-events: none;
-            animation: floatDownFlower 7s linear infinite;
+            animation: floatDownFlower 6.5s linear infinite;
             filter: drop-shadow(0 0 6px rgba(255, 121, 198, 0.6));
         }
 
-        /* TOP TO BOTTOM FLOATING ANIMATION */
         @keyframes floatDownFlower {
             0% {
-                transform: translateY(-10vh) rotate(0deg) scale(0.8);
-                opacity: 0.9;
+                transform: translateY(-12vh) rotate(0deg) scale(0.8);
+                opacity: 0.95;
             }
             100% {
-                transform: translateY(105vh) rotate(360deg) scale(1.2);
-                opacity: 0.1;
+                transform: translateY(108vh) rotate(360deg) scale(1.15);
+                opacity: 0.15;
             }
         }
 
@@ -64,10 +64,10 @@
             width: 100vw;
             height: 100vh;
             z-index: 5;
-            pointer-events: none; /* Clicks only allowed on balloons */
+            pointer-events: none;
         }
 
-        /* Perfectly Centered Screen Cards */
+        /* Perfectly Centered Screens */
         .screen {
             display: none;
             position: fixed;
@@ -75,7 +75,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: 20; /* High Z-index ensures buttons are fully clickable */
+            z-index: 20;
             justify-content: center;
             align-items: center;
             padding: 15px;
@@ -84,7 +84,7 @@
 
         .screen.active {
             display: flex !important;
-            animation: fadeIn 0.4s ease-out forwards;
+            animation: fadeIn 0.2s ease-out forwards;
         }
 
         .card {
@@ -168,14 +168,14 @@
             border-radius: 30px;
             cursor: pointer;
             box-shadow: 0 5px 15px rgba(255, 121, 198, 0.4);
-            transition: transform 0.2s ease, background 0.3s ease;
+            transition: transform 0.1s ease, background 0.3s ease;
             position: relative;
             z-index: 40;
             pointer-events: auto !important;
         }
 
         button:active {
-            transform: scale(0.95);
+            transform: scale(0.93);
         }
 
         .btn-group {
@@ -206,7 +206,7 @@
             display: none !important;
         }
 
-        /* Balloons with Hanging Curly Ribbons */
+        /* Balloon with Hanging Ribbon */
         .balloon-wrapper {
             position: absolute;
             width: 55px;
@@ -227,7 +227,6 @@
             position: relative;
         }
 
-        /* Ribbon Thread */
         .balloon-ribbon {
             position: absolute;
             top: 63px;
@@ -245,22 +244,22 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.96); }
+            from { opacity: 0; transform: scale(0.98); }
             to { opacity: 1; transform: scale(1); }
         }
     </style>
 </head>
 <body>
 
-    <!-- Audio Tag -->
+    <!-- Audio Element -->
     <audio id="bgMusic" loop preload="auto">
-        <source src="birthday-tone.m4a" type="audio/mp4">
+        <source src="Birthday-tone.m4a" type="audio/mp4">
     </audio>
 
-    <!-- Floating Flowers Background Container (Top to Bottom) -->
+    <!-- Top to Bottom Rich Floating Elements Container -->
     <div id="flowerContainer"></div>
 
-    <!-- Balloon Game Container Layer -->
+    <!-- Balloon Game Container -->
     <div id="balloonStage" class="balloon-stage"></div>
 
     <!-- Screen 1 -->
@@ -309,7 +308,7 @@
         </div>
     </div>
 
-    <!-- Screen 5: Balloon Pop Game -->
+    <!-- Screen 5: Balloon Game -->
     <div id="screen5" class="screen">
         <div class="card">
             <h2>Pop the Floating Balloons! 🎈</h2>
@@ -367,15 +366,15 @@
         </div>
     </div>
 
-    <!-- JavaScript Logic -->
+    <!-- JavaScript Execution -->
     <script>
         let poppedCount = 0;
         let balloonInterval = null;
 
-        // Generate Big Floating Flowers (Flowing From TOP to BOTTOM)
+        // Floating Rich Elements (Top to Bottom with Flowers, Hearts, and Fireworks)
         function createFlowers() {
             const container = document.getElementById('flowerContainer');
-            const items = ['🌸', '🌺', '🌹', '🌼', '💖', '✨', '🌸'];
+            const items = ['🌸', '🌺', '🌹', '🌼', '💖', '💓', '✨', '💫', '🎉', '🎊', '🌸', '💖'];
             
             setInterval(() => {
                 const flower = document.createElement('div');
@@ -389,17 +388,17 @@
 
                 setTimeout(() => {
                     flower.remove();
-                }, 7500);
-            }, 450);
+                }, 7000);
+            }, 380);
         }
 
         createFlowers();
 
-        // Audio & Screen Navigation
+        // Audio & Instant Screen Switching
         function startExperience() {
             const audio = document.getElementById('bgMusic');
             if (audio) {
-                audio.play().catch(e => console.log("Audio play info: ", e));
+                audio.play().catch(e => console.log("Audio info: ", e));
             }
             nextScreen(2);
         }
@@ -419,7 +418,7 @@
             btn.style.transform = `translate(${x}px, ${y}px)`;
         }
 
-        // Guaranteed Balloon Pop Logic
+        // Fast Balloon Pop Logic
         function startBalloonGame() {
             nextScreen(5);
             poppedCount = 0;
