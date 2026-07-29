@@ -278,7 +278,7 @@
 <body>
 
     <!-- Audio Element -->
-    <audio id="bgMusic" loop preload="auto">
+    <audio id="bgMusic" loop playsinline preload="auto">
         <source src="Birthday-tone.m4a" type="audio/mp4">
     </audio>
 
@@ -424,10 +424,19 @@
             }, 1200);
         }
 
+        // Guaranteed Audio Trigger on User Click
         function startExperience() {
             const audio = document.getElementById('bgMusic');
             if (audio) {
-                audio.play().catch(e => console.log("Audio info: ", e));
+                audio.currentTime = 0;
+                let playPromise = audio.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        console.log("Audio playing successfully!");
+                    }).catch(error => {
+                        console.log("Audio autoplay error: ", error);
+                    });
+                }
             }
             
             startFloatingElements();
@@ -449,7 +458,7 @@
             btn.style.transform = `translate(${x}px, ${y}px)`;
         }
 
-        // Balloon Game Logic (Single Touch Pop, No Counter, 5 Balloons to Proceed)
+        // Balloon Game Logic
         function startBalloonGame() {
             nextScreen(5);
             poppedCount = 0;
