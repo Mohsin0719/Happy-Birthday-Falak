@@ -25,35 +25,36 @@
             position: relative;
         }
 
-        /* 1. BACKGROUND FLOATING ELEMENTS (Starts strictly AFTER Screen 1) */
+        /* 1. BACKGROUND FLOATING ELEMENTS (Strictly Disabled on Screen 1) */
         #flowerContainer {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: 1;
+            z-index: 1; /* Lowest background layer */
             pointer-events: none;
             overflow: hidden;
-            display: none;
+            display: none !important; /* Force hidden initially */
         }
 
         .floating-flower {
             position: absolute;
             user-select: none;
             pointer-events: none;
-            animation: floatDownSlow 12s linear infinite;
-            filter: drop-shadow(0 0 6px rgba(255, 121, 198, 0.5));
+            animation: floatDownSlow 22s linear infinite; /* Extremely slow & subtle */
+            filter: drop-shadow(0 0 6px rgba(255, 121, 198, 0.4));
+            opacity: 0.8;
         }
 
         @keyframes floatDownSlow {
             0% {
-                transform: translateY(-12vh) rotate(0deg) scale(0.8);
-                opacity: 0.9;
+                transform: translateY(-10vh) rotate(0deg);
+                opacity: 0.8;
             }
             100% {
-                transform: translateY(108vh) rotate(360deg) scale(1.1);
-                opacity: 0.15;
+                transform: translateY(110vh) rotate(180deg);
+                opacity: 0.1;
             }
         }
 
@@ -68,7 +69,7 @@
             pointer-events: none;
         }
 
-        /* 3. SCREENS & CARDS */
+        /* 3. SCREENS & CARDS (High Z-Index to keep text clear & clean) */
         .screen {
             display: none;
             position: fixed;
@@ -76,7 +77,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: 50;
+            z-index: 100;
             justify-content: center;
             align-items: center;
             padding: 20px;
@@ -89,22 +90,22 @@
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(20, 20, 35, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
             border-radius: 24px;
             padding: 30px 22px;
             width: 100%;
             max-width: 360px;
             text-align: center;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 121, 198, 0.25);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), 0 0 25px rgba(255, 121, 198, 0.25);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             position: relative;
-            z-index: 60;
+            z-index: 1000;
         }
 
         h1 {
@@ -170,7 +171,7 @@
             box-shadow: 0 5px 15px rgba(255, 121, 198, 0.4);
             transition: transform 0.1s ease;
             position: relative;
-            z-index: 70;
+            z-index: 1100;
             pointer-events: auto !important;
         }
 
@@ -204,15 +205,15 @@
             display: none !important;
         }
 
-        /* 4. BALLOONS FLOATING FROM BOTTOM TO TOP (With Balloon on Top & Ribbon Hanging Below) */
+        /* 4. REALISTIC BALLOONS (Natural Shape + Knot + Curved SVG Thread) */
         .balloon-wrapper {
             position: absolute;
-            width: 60px;
-            height: 95px;
+            width: 65px;
+            height: 110px;
             cursor: pointer;
-            z-index: 100;
+            z-index: 10;
             pointer-events: auto;
-            animation: floatUpBalloon 5.5s linear forwards;
+            animation: floatUpBalloon 6.5s cubic-bezier(0.4, 0, 0.6, 1) forwards;
             touch-action: manipulation;
         }
 
@@ -228,19 +229,15 @@
             100% { transform: scale(0); opacity: 0; }
         }
 
-        /* Balloon Face/Body At Top */
         .balloon-body {
-            width: 55px;
-            height: 65px;
+            width: 56px;
+            height: 68px;
             border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
-            box-shadow: inset -6px -6px 12px rgba(0,0,0,0.2), 0 5px 15px rgba(255, 121, 198, 0.4);
             position: relative;
             margin: 0 auto;
         }
 
-        /* Knot at bottom of balloon */
-        .balloon-body::after {
-            content: '';
+        .balloon-knot {
             position: absolute;
             bottom: -4px;
             left: 50%;
@@ -248,30 +245,28 @@
             width: 8px;
             height: 5px;
             background: inherit;
-            border-radius: 3px 3px 5px 5px;
+            border-radius: 40%;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.3);
         }
 
-        /* Ribbon Hanging Below Balloon Body */
-        .balloon-ribbon {
+        .balloon-string-svg {
             position: absolute;
-            top: 68px;
+            top: 71px;
             left: 50%;
-            width: 2px;
-            height: 32px;
-            background: rgba(255, 255, 255, 0.85);
-            transform-origin: top center;
-            animation: ribbonSway 1.2s ease-in-out infinite alternate;
-            border-radius: 50%;
-            box-shadow: 0 0 3px rgba(255,255,255,0.6);
+            transform: translateX(-50%);
+            width: 20px;
+            height: 42px;
+            pointer-events: none;
+            animation: stringSway 1.8s ease-in-out infinite alternate;
         }
 
-        @keyframes ribbonSway {
-            0% { transform: translateX(-50%) rotate(-10deg); }
-            100% { transform: translateX(-50%) rotate(10deg); }
+        @keyframes stringSway {
+            0% { transform: translateX(-50%) rotate(-6deg); }
+            100% { transform: translateX(-50%) rotate(6deg); }
         }
 
         @keyframes floatUpBalloon {
-            0% { bottom: -110px; opacity: 1; }
+            0% { bottom: -120px; opacity: 1; }
             100% { bottom: 108vh; opacity: 0.95; }
         }
 
@@ -288,13 +283,13 @@
         <source src="birthday-tone.m4a" type="audio/mp4">
     </audio>
 
-    <!-- Background Container (Hidden on Screen 1) -->
+    <!-- Background Emojis (Strictly Hidden on Screen 1) -->
     <div id="flowerContainer"></div>
 
-    <!-- Balloon Game Container -->
+    <!-- Balloon Game Stage Layer -->
     <div id="balloonStage" class="balloon-stage"></div>
 
-    <!-- Screen 1 -->
+    <!-- Screen 1 (100% Clean) -->
     <div id="screen1" class="screen active">
         <div class="card">
             <div class="date-badge">📅 03 August 2026</div>
@@ -404,33 +399,34 @@
         let balloonInterval = null;
         let elementsStarted = false;
 
-        // Slow & Gentle Background Floating Elements (Triggered past Screen 1)
+        // Emojis floating logic - Starts ONLY ONCE user clicks "Let's Start ✨"
         function startFloatingElements() {
             if (elementsStarted) return;
             elementsStarted = true;
 
             const container = document.getElementById('flowerContainer');
-            container.style.display = 'block';
+            // Un-hide explicitly after button click
+            container.style.setProperty('display', 'block', 'important');
 
-            const items = ['🌸', '🌺', '💖', '💗', '💓','✨', '🎉', '🎊'];
+            const items = ['🌸', '🌺', '💖', '💗', '💓', '✨', '🎉', '🎊'];
             
             setInterval(() => {
                 const el = document.createElement('div');
                 el.className = 'floating-flower';
                 el.innerText = items[Math.floor(Math.random() * items.length)];
-                el.style.left = Math.random() * 92 + 'vw';
-                el.style.animationDuration = (Math.random() * 4 + 10) + 's';
-                el.style.fontSize = (Math.random() * 12 + 20) + 'px';
+                el.style.left = Math.random() * 90 + 'vw';
+                el.style.animationDuration = (Math.random() * 6 + 18) + 's'; // 18-24 seconds speed
+                el.style.fontSize = (Math.random() * 10 + 18) + 'px';
                 
                 container.appendChild(el);
 
                 setTimeout(() => {
                     el.remove();
-                }, 13000);
-            }, 600);
+                }, 24000);
+            }, 1200);
         }
 
-        // Start Experience on Screen 1 Click
+        // Triggered on Screen 1 Click
         function startExperience() {
             const audio = document.getElementById('bgMusic');
             if (audio) {
@@ -456,7 +452,7 @@
             btn.style.transform = `translate(${x}px, ${y}px)`;
         }
 
-        // Balloon Game (Bottom to Top with Swaying Ribbons Below)
+        // Realistic Balloon Game Logic
         function startBalloonGame() {
             nextScreen(5);
             poppedCount = 0;
@@ -473,12 +469,17 @@
 
                 const wrapper = document.createElement('div');
                 wrapper.className = 'balloon-wrapper';
-                wrapper.style.left = Math.random() * (window.innerWidth - 75) + 'px';
+                wrapper.style.left = Math.random() * (window.innerWidth - 80) + 'px';
 
                 const hue = Math.floor(Math.random() * 360);
+                
                 wrapper.innerHTML = `
-                    <div class="balloon-body" style="background: hsl(${hue}, 85%, 65%); box-shadow: inset -6px -6px 12px rgba(0,0,0,0.2), 0 5px 15px hsl(${hue}, 85%, 65%, 0.5);"></div>
-                    <div class="balloon-ribbon"></div>
+                    <div class="balloon-body" style="background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0) 30%), hsl(${hue}, 85%, 65%); box-shadow: inset -5px -5px 10px rgba(0,0,0,0.3), 0 6px 18px hsl(${hue}, 85%, 65%, 0.4);">
+                        <div class="balloon-knot"></div>
+                    </div>
+                    <svg class="balloon-string-svg" viewBox="0 0 20 50">
+                        <path d="M10,0 Q18,15 5,30 T10,50" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="1.8"/>
+                    </svg>
                 `;
 
                 const popMe = function(e) {
@@ -517,9 +518,9 @@
                     if (wrapper.parentNode && !wrapper.classList.contains('popping')) {
                         wrapper.remove();
                     }
-                }, 5500);
+                }, 6500);
 
-            }, 750);
+            }, 900);
         }
 
         function finishCelebration() {
