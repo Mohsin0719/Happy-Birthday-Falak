@@ -29,6 +29,12 @@
             height: 100%;
             pointer-events: none;
             z-index: 1; 
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        #magicCanvas.active-canvas {
+            opacity: 1;
         }
 
         /* Balloons Layer */
@@ -278,7 +284,7 @@
             <div class="date-badge">📅 03 August 2026</div>
             <span class="cake">✨</span>
             <h1>Surprise Inside!</h1>
-            <p>Are you ready for this? 🌸</p>
+            <p>Are you ready for your special gift, Falak? 🌸</p>
             <button onclick="startExperience()">Let's Start ✨</button>
         </div>
     </div>
@@ -349,7 +355,7 @@
             <h1>Falak</h1>
             <p style="font-size: 20px; color: #ff79c6; font-weight: 600;">✨ 19 & Shining ✨</p>
             <p>You're the best! Wishing you an epic amazing year ahead🥰 🎉🎉👏🥳! ❤️</p>
-            <button onclick="nextScreen(8)">Final Note ✨</button>
+            <button onclick="nextScreen(8)">Next</button>
         </div>
     </div>
 
@@ -360,7 +366,7 @@
                 Created just for you to make your day extra special! ❤️✨
             </p>
             <div class="from-tag">~ From Mohsin ✨💖</div>
-            <button style="margin-top: 10px;" onclick="finishCelebration()">Finish ✨</button>
+            <button style="margin-top: 10px;" onclick="finishCelebration()">Make a Wish ✨</button>
         </div>
     </div>
 
@@ -449,6 +455,7 @@
 
         function startExperience() {
             startContinuousMusic();
+            document.getElementById("magicCanvas").classList.add("active-canvas");
             nextScreen(2);
         }
 
