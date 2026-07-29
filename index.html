@@ -24,7 +24,8 @@
             position: relative;
         }
 
-        #magicCanvas {
+        /* Floating Flowers & Stars Container */
+        #flowerContainer {
             position: fixed;
             top: 0;
             left: 0;
@@ -34,17 +35,31 @@
             pointer-events: none;
         }
 
+        .flower {
+            position: absolute;
+            font-size: 20px;
+            user-select: none;
+            animation: floatUpFlower 8s linear infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes floatUpFlower {
+            0% { transform: translateY(105vh) rotate(0deg); opacity: 0.8; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Balloons Layer */
         .balloon-stage {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: 2;
+            z-index: 20;
             pointer-events: auto;
         }
 
-        /* Perfectly Centered Screens with Flexbox */
+        /* Perfectly Centered Screens */
         .screen {
             display: none;
             position: fixed;
@@ -177,33 +192,39 @@
             display: none !important;
         }
 
-        /* Floating Balloon Animation & Ribbon */
-        .pop-balloon {
+        /* Balloons with Beautiful Curly Ribbons */
+        .balloon-wrapper {
             position: absolute;
             width: 50px;
-            height: 62px;
-            background: #ff79c6;
-            border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+            height: 60px;
             cursor: pointer;
             z-index: 100;
             pointer-events: auto;
-            animation: floatUp 4.5s linear forwards;
-            box-shadow: inset -5px -5px 10px rgba(0,0,0,0.15);
+            animation: floatUp 4s linear forwards;
         }
 
-        .pop-balloon::after {
-            content: '';
+        .balloon-body {
+            width: 50px;
+            height: 60px;
+            background: #ff79c6;
+            border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+            box-shadow: inset -5px -5px 12px rgba(0,0,0,0.15), 0 5px 15px rgba(255, 121, 198, 0.4);
+            position: relative;
+        }
+
+        .balloon-ribbon {
             position: absolute;
-            bottom: -12px;
+            top: 58px;
             left: 23px;
             width: 2px;
-            height: 14px;
-            background: rgba(255, 255, 255, 0.7);
+            height: 28px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 2px;
         }
 
         @keyframes floatUp {
-            0% { bottom: -80px; opacity: 1; }
-            100% { bottom: 105vh; opacity: 0.8; }
+            0% { bottom: -90px; opacity: 1; }
+            100% { bottom: 108vh; opacity: 0.9; }
         }
 
         @keyframes fadeIn {
@@ -216,11 +237,11 @@
 
     <!-- Audio Element -->
     <audio id="bgMusic" loop preload="auto">
-        <source src="Birthday-tone.m4a" type="audio/mp4">
+        <source src="birthday-tone.m4a" type="audio/mp4">
     </audio>
 
-    <!-- Particles Background -->
-    <canvas id="magicCanvas"></canvas>
+    <!-- Floating Flowers Container -->
+    <div id="flowerContainer"></div>
 
     <!-- Balloon Game Container -->
     <div id="balloonStage" class="balloon-stage"></div>
@@ -271,11 +292,11 @@
         </div>
     </div>
 
-    <!-- Screen 5 -->
+    <!-- Screen 5: Balloon Game -->
     <div id="screen5" class="screen">
         <div class="card">
             <h2>Pop the Floating Balloons! 🎈</h2>
-            <p style="font-size: 14px;" id="gameProgressText">Tap 5 balloons to proceed! (0/5)</p>
+            <p style="font-size: 15px; font-weight: 600; color: #ff79c6;" id="gameProgressText">Tap 5 balloons! (0/5)</p>
             <button id="finalBtn" class="hidden" onclick="nextScreen(6)">Next ✨</button>
         </div>
     </div>
@@ -334,67 +355,34 @@
         let poppedCount = 0;
         let balloonInterval = null;
 
-        // Background Particles
-        const canvas = document.getElementById('magicCanvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        // Generate Floating Flowers in Background
+        function createFlowers() {
+            const container = document.getElementById('flowerContainer');
+            const icons = ['🌸', '🌺', '✨', '🌼', '💖', '⭐'];
+            
+            setInterval(() => {
+                const flower = document.createElement('div');
+                flower.className = 'flower';
+                flower.innerText = icons[Math.floor(Math.random() * icons.length)];
+                flower.style.left = Math.random() * 95 + 'vw';
+                flower.style.animationDuration = (Math.random() * 4 + 5) + 's';
+                flower.style.fontSize = (Math.random() * 12 + 16) + 'px';
+                
+                container.appendChild(flower);
 
-        let particles = [];
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2.5 + 1;
-                this.speedX = Math.random() * 0.8 - 0.4;
-                this.speedY = Math.random() * 0.8 - 0.4;
-                this.color = `hsl(${Math.random() * 60 + 300}, 100%, 75%)`;
-            }
-
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
-            }
-
-            draw() {
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
+                setTimeout(() => {
+                    flower.remove();
+                }, 8500);
+            }, 600);
         }
 
-        function initParticles() {
-            particles = [];
-            for (let i = 0; i < 50; i++) {
-                particles.push(new Particle());
-            }
-        }
+        createFlowers();
 
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-            requestAnimationFrame(animateParticles);
-        }
-
-        initParticles();
-        animateParticles();
-
-        // Screen & Audio Trigger
+        // Audio & Screen Transitions
         function startExperience() {
             const audio = document.getElementById('bgMusic');
             if (audio) {
-                audio.play().then(() => {
-                    console.log("Audio playing successfully");
-                }).catch(e => {
-                    console.log("Audio trigger info: ", e);
-                });
+                audio.play().catch(e => console.log("Audio play info: ", e));
             }
             nextScreen(2);
         }
@@ -414,12 +402,12 @@
             btn.style.transform = `translate(${x}px, ${y}px)`;
         }
 
-        // Balloon Pop Game Logic
+        // Guaranteed Balloon Pop Logic
         function startBalloonGame() {
             nextScreen(5);
             poppedCount = 0;
             const stage = document.getElementById('balloonStage');
-            stage.innerHTML = ''; // Clear previous elements
+            stage.innerHTML = '';
             
             if (balloonInterval) clearInterval(balloonInterval);
 
@@ -429,45 +417,52 @@
                     return;
                 }
 
-                const balloon = document.createElement('div');
-                balloon.className = 'pop-balloon';
-                balloon.style.left = Math.random() * (window.innerWidth - 60) + 'px';
-                balloon.style.backgroundColor = `hsl(${Math.random() * 360}, 85%, 65%)`;
+                const wrapper = document.createElement('div');
+                wrapper.className = 'balloon-wrapper';
+                wrapper.style.left = Math.random() * (window.innerWidth - 70) + 'px';
 
-                balloon.addEventListener('click', function popHandler() {
+                const hue = Math.floor(Math.random() * 360);
+                wrapper.innerHTML = `
+                    <div class="balloon-body" style="background: hsl(${hue}, 85%, 65%); box-shadow: inset -5px -5px 12px rgba(0,0,0,0.15), 0 5px 15px hsl(${hue}, 85%, 65%, 0.4);"></div>
+                    <div class="balloon-ribbon"></div>
+                `;
+
+                // Pop Handler on Touch / Click
+                const popMe = function(e) {
+                    e.stopPropagation();
                     poppedCount++;
+                    
                     const progressText = document.getElementById('gameProgressText');
                     if (progressText) {
-                        progressText.innerText = `Tap 5 balloons to proceed! (${poppedCount}/5)`;
+                        progressText.innerText = `Tap 5 balloons! (${poppedCount}/5)`;
                     }
 
-                    this.remove();
+                    wrapper.remove();
 
                     if (poppedCount >= 5) {
                         clearInterval(balloonInterval);
                         const nextBtn = document.getElementById('finalBtn');
-                        if (nextBtn) nextBtn.classList.remove('hidden');
+                        if (nextBtn) {
+                            nextBtn.classList.remove('hidden');
+                        }
                     }
-                });
+                };
 
-                stage.appendChild(balloon);
+                wrapper.addEventListener('click', popMe);
+                wrapper.addEventListener('touchstart', popMe);
+
+                stage.appendChild(wrapper);
 
                 setTimeout(() => {
-                    if (balloon.parentNode) balloon.remove();
-                }, 4500);
+                    if (wrapper.parentNode) wrapper.remove();
+                }, 4000);
 
-            }, 700);
+            }, 650);
         }
 
         function finishCelebration() {
             alert("✨ Your wish has been sent into the stars! Happy Birthday Falak! 🎉💖");
         }
-
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            initParticles();
-        });
     </script>
 </body>
 </html>
